@@ -13,7 +13,7 @@ interface ChatState {
 }
 
 interface ChatContextValue extends ChatState {
-  loadSessions: () => Promise<void>;
+  loadSessions: () => Promise<string[] | void>;
   selectSession: (id: string) => Promise<void>;
   createSession: () => Promise<void>;
   sendMessage: (message: string) => Promise<void>;
