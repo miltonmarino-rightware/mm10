@@ -1,26 +1,47 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { ChatProvider } from "@/hooks/useChatContext";
+import { AppShell } from "@/components/layout/AppShell";
+import ChatPage from "@/pages/ChatPage";
+import SettingsPage from "@/pages/SettingsPage";
+import AboutPage from "@/pages/AboutPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
+    <BrowserRouter>
+      <ChatProvider>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          <Route
+            path="/"
+            element={
+              <AppShell>
+                <ChatPage />
+              </AppShell>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <AppShell>
+                <SettingsPage />
+              </AppShell>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <AppShell>
+                <AboutPage />
+              </AppShell>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+      </ChatProvider>
+    </BrowserRouter>
   </QueryClientProvider>
 );
 
