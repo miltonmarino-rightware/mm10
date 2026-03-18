@@ -6,26 +6,26 @@
 
 @layer base {
   :root {
-    --background: 222 47% 4%;
-    --foreground: 210 25% 92%;
+    --background: 220 16% 3.5%;
+    --foreground: 210 20% 93%;
 
-    --card: 222 47% 7%;
-    --card-foreground: 210 25% 92%;
+    --card: 220 16% 6%;
+    --card-foreground: 210 20% 93%;
 
-    --popover: 222 47% 7%;
-    --popover-foreground: 210 25% 92%;
+    --popover: 220 16% 7%;
+    --popover-foreground: 210 20% 93%;
 
-    --primary: 174 100% 39%;
-    --primary-foreground: 222 47% 4%;
+    --primary: 152 55% 46%;
+    --primary-foreground: 220 16% 3.5%;
 
-    --secondary: 217 32% 12%;
-    --secondary-foreground: 210 25% 85%;
+    --secondary: 220 20% 9%;
+    --secondary-foreground: 210 20% 85%;
 
-    --muted: 217 32% 17%;
-    --muted-foreground: 215 16% 55%;
+    --muted: 220 16% 14%;
+    --muted-foreground: 215 12% 48%;
 
-    --accent: 174 60% 25%;
-    --accent-foreground: 174 100% 80%;
+    --accent: 152 30% 16%;
+    --accent-foreground: 152 55% 72%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
@@ -33,24 +33,24 @@
     --warning: 38 92% 50%;
     --warning-foreground: 38 10% 10%;
 
-    --border: 217 32% 15%;
-    --input: 217 32% 15%;
-    --ring: 174 100% 39%;
+    --border: 220 16% 10%;
+    --input: 220 16% 10%;
+    --ring: 152 55% 46%;
 
     --radius: 0.75rem;
 
-    --surface: 222 47% 7%;
-    --surface-raised: 222 40% 10%;
-    --surface-overlay: 222 47% 5%;
+    --surface: 220 16% 5%;
+    --surface-raised: 220 16% 8%;
+    --surface-overlay: 220 16% 4%;
 
-    --sidebar-background: 222 50% 5%;
-    --sidebar-foreground: 215 16% 65%;
-    --sidebar-primary: 174 100% 39%;
-    --sidebar-primary-foreground: 222 47% 4%;
-    --sidebar-accent: 217 32% 12%;
-    --sidebar-accent-foreground: 210 25% 92%;
-    --sidebar-border: 217 32% 12%;
-    --sidebar-ring: 174 100% 39%;
+    --sidebar-background: 220 18% 3%;
+    --sidebar-foreground: 215 12% 60%;
+    --sidebar-primary: 152 55% 46%;
+    --sidebar-primary-foreground: 220 16% 3.5%;
+    --sidebar-accent: 220 20% 10%;
+    --sidebar-accent-foreground: 210 20% 93%;
+    --sidebar-border: 220 16% 10%;
+    --sidebar-ring: 152 55% 46%;
 
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
@@ -73,28 +73,38 @@
   .surface-raised {
     @apply bg-[hsl(var(--surface-raised))];
   }
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(152 55% 46% / 0.15), 0 0 60px hsl(152 55% 46% / 0.05);
+  }
+  .glow-primary-sm {
+    box-shadow: 0 0 10px hsl(152 55% 46% / 0.2);
+  }
   .glow-teal {
-    box-shadow: 0 0 20px hsl(174 100% 39% / 0.15), 0 0 60px hsl(174 100% 39% / 0.05);
+    box-shadow: 0 0 20px hsl(152 55% 46% / 0.15), 0 0 60px hsl(152 55% 46% / 0.05);
   }
   .glow-teal-sm {
-    box-shadow: 0 0 10px hsl(174 100% 39% / 0.2);
+    box-shadow: 0 0 10px hsl(152 55% 46% / 0.2);
   }
   .shadow-premium {
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
   }
   .shadow-card {
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 hsl(217 32% 20% / 0.3);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 hsl(220 16% 14% / 0.3);
   }
   .border-glow {
-    border-color: hsl(174 100% 39% / 0.3);
+    border-color: hsl(152 55% 46% / 0.3);
+  }
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(152 55% 55%), hsl(152 45% 38%));
   }
   .text-gradient-teal {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(174 100% 50%), hsl(174 80% 35%));
+    background-image: linear-gradient(135deg, hsl(152 55% 55%), hsl(152 45% 38%));
   }
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(217 32% 20%) transparent;
+    scrollbar-color: hsl(220 16% 16%) transparent;
   }
   .scrollbar-thin::-webkit-scrollbar {
     width: 4px;
@@ -103,10 +113,17 @@
     background: transparent;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: hsl(217 32% 20%);
+    background: hsl(220 16% 16%);
     border-radius: 2px;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: hsl(217 32% 30%);
+    background: hsl(220 16% 24%);
+  }
+  .animate-pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
   }
 }
