@@ -126,4 +126,7 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.6; }
   }
+  .text-glow-primary {
+    text-shadow: 0 0 20px hsl(152 55% 46% / 0.3), 0 0 40px hsl(152 55% 46% / 0.1);
+  }
 }

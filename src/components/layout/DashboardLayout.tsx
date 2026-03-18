@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu, X, LayoutDashboard, MessageSquare, GraduationCap,
   BarChart3, Radio, Calendar, Users, Trophy, Image, User,
-  LogOut, Shield
+  LogOut, Shield, ChevronLeft, Mail
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
@@ -18,6 +18,7 @@ const clientNav = [
   { path: '/app/broadcasts', label: 'Broadcasts', icon: Radio },
   { path: '/app/bookings', label: 'Reservas', icon: Calendar },
   { path: '/app/groups', label: 'Grupos', icon: Users },
+  { path: '/app/messages', label: 'Mensagens', icon: Mail },
   { path: '/app/events', label: 'Eventos', icon: Trophy },
   { path: '/app/museum', label: 'Museu', icon: Image },
   { path: '/app/profile', label: 'Perfil', icon: User },
@@ -31,6 +32,7 @@ const adminNav = [
   { path: '/admin/trades', label: 'Trading Journal', icon: BarChart3 },
   { path: '/admin/bookings', label: 'Reservas', icon: Calendar },
   { path: '/admin/groups', label: 'Grupos', icon: Users },
+  { path: '/admin/messages', label: 'Mensagens', icon: Mail },
   { path: '/admin/events', label: 'Eventos', icon: Trophy },
   { path: '/admin/museum', label: 'Museu', icon: Image },
 ];
@@ -47,9 +49,14 @@ export default function DashboardLayout() {
   const navItems: NavItem[] = isAdmin ? adminNav : clientNav;
 
   const isActive = (item: NavItem) =>
+    item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path) && !(item.exact === undefined && location.pathname === item.path.split('/').slice(0, -1).join('/'));
+
+  const isActiveCheck = (item: NavItem) =>
     item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path);
 
   const handleLogout = () => { logout(); navigate('/'); };
+
+  const canGoBack = location.key !== 'default';
 
   const SidebarNav = () => (
     <div className="flex flex-col h-full">
@@ -69,7 +76,7 @@ export default function DashboardLayout() {
 
       <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto scrollbar-thin">
         {navItems.map(item => {
-          const active = isActive(item);
+          const active = isActiveCheck(item);
           return (
             <Link
               key={item.path}
@@ -91,22 +98,16 @@ export default function DashboardLayout() {
 
       {isAdmin && (
         <div className="px-3 pb-2">
-          <Link
-            to="/app"
-            onClick={() => setSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-          >
+          <Link to="/app" onClick={() => setSidebarOpen(false)}
+            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-all">
             <MessageSquare size={14} /> Ver como cliente
           </Link>
         </div>
       )}
       {!isAdmin && user?.email?.toLowerCase().includes('admin') && (
         <div className="px-3 pb-2">
-          <Link
-            to="/admin"
-            onClick={() => setSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-primary/70 hover:text-primary hover:bg-primary/5 transition-all"
-          >
+          <Link to="/admin" onClick={() => setSidebarOpen(false)}
+            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-primary/70 hover:text-primary hover:bg-primary/5 transition-all">
             <Shield size={14} /> Painel Admin
           </Link>
         </div>
@@ -149,10 +150,8 @@ export default function DashboardLayout() {
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="fixed inset-y-0 left-0 z-50 w-72 bg-[hsl(var(--sidebar-background))] border-r border-border flex flex-col lg:hidden"
             >
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="absolute top-3 right-3 p-2 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
-              >
+              <button onClick={() => setSidebarOpen(false)}
+                className="absolute top-3 right-3 p-2 rounded-lg hover:bg-secondary text-muted-foreground transition-colors">
                 <X size={20} />
               </button>
               <SidebarNav />
@@ -163,12 +162,23 @@ export default function DashboardLayout() {
 
       <main className="flex-1 flex flex-col min-w-0 relative">
         <header className="h-14 border-b border-border flex items-center justify-between px-4 lg:px-6 bg-background/80 backdrop-blur-md sticky top-0 z-30 shrink-0">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg"
-          >
-            <Menu size={22} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg"
+            >
+              <Menu size={22} />
+            </button>
+            {canGoBack && (
+              <button
+                onClick={() => navigate(-1)}
+                className="p-2 -ml-1 text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-all active:scale-95"
+                title="Voltar"
+              >
+                <ChevronLeft size={20} />
+              </button>
+            )}
+          </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" />
             <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">

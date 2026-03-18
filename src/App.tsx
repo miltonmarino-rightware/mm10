@@ -38,6 +38,8 @@ import AdminBookings from "@/pages/admin/AdminBookings";
 import AdminGroups from "@/pages/admin/AdminGroups";
 import AdminEvents from "@/pages/admin/AdminEvents";
 import AdminMuseum from "@/pages/admin/AdminMuseum";
+import AppMessages from "@/pages/app/AppMessages";
+import AdminMessages from "@/pages/admin/AdminMessages";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +85,7 @@ function AppRoutes() {
         <Route path="broadcasts" element={<AppBroadcasts />} />
         <Route path="bookings" element={<AppBookings />} />
         <Route path="groups" element={<AppGroups />} />
+        <Route path="messages" element={<AppMessages />} />
         <Route path="events" element={<AppEvents />} />
         <Route path="museum" element={<AppMuseum />} />
         <Route path="profile" element={<AppProfile />} />
@@ -97,6 +100,7 @@ function AppRoutes() {
         <Route path="trades" element={<AdminTrades />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="groups" element={<AdminGroups />} />
+        <Route path="messages" element={<AdminMessages />} />
         <Route path="events" element={<AdminEvents />} />
         <Route path="museum" element={<AdminMuseum />} />
       </Route>
