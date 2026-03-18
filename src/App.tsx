@@ -85,6 +85,7 @@ function AppRoutes() {
         <Route path="broadcasts" element={<AppBroadcasts />} />
         <Route path="bookings" element={<AppBookings />} />
         <Route path="groups" element={<AppGroups />} />
+        <Route path="messages" element={<AppMessages />} />
         <Route path="events" element={<AppEvents />} />
         <Route path="museum" element={<AppMuseum />} />
         <Route path="profile" element={<AppProfile />} />
