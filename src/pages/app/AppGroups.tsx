@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, MessageSquare, Plus, Hash } from 'lucide-react';
-
-const groups = [
-  { id: '1', name: 'Turma Forex Iniciante', description: 'Grupo para novos traders', members: 24, lastMessage: 'Tarik: Boa sessão hoje!', createdAt: '2026-01-15' },
-  { id: '2', name: 'Price Action Pro', description: 'Análise avançada de price action', members: 12, lastMessage: 'João: Alguém viu o EUR/USD?', createdAt: '2026-02-01' },
-  { id: '3', name: 'Trading Diário', description: 'Partilha de setups diários', members: 38, lastMessage: 'Tarik: Análise semanal enviada', createdAt: '2025-12-10' },
-  { id: '4', name: 'Mentoria VIP', description: 'Grupo exclusivo de mentoria', members: 8, lastMessage: 'Ana: Obrigada pelo feedback!', createdAt: '2026-03-01' },
-];
+import { Users, MessageSquare, Hash } from 'lucide-react';
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 const anim = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
 export default function AppGroups() {
+  const { brand } = useBusinessConfig();
+
+  const groups = [
+    { id: '1', name: 'Turma Forex Iniciante', description: 'Grupo para novos traders', members: 24, lastMessage: `${brand.mentorName}: Boa sessão hoje!`, createdAt: '2026-01-15' },
+    { id: '2', name: 'Price Action Pro', description: 'Análise avançada de price action', members: 12, lastMessage: 'João: Alguém viu o EUR/USD?', createdAt: '2026-02-01' },
+    { id: '3', name: 'Trading Diário', description: 'Partilha de setups diários', members: 38, lastMessage: `${brand.mentorName}: Análise semanal enviada`, createdAt: '2025-12-10' },
+    { id: '4', name: 'Mentoria VIP', description: 'Grupo exclusivo de mentoria', members: 8, lastMessage: 'Ana: Obrigada pelo feedback!', createdAt: '2026-03-01' },
+  ];
+
   return (
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }}
       className="p-4 lg:p-8 space-y-6 max-w-5xl mx-auto">
