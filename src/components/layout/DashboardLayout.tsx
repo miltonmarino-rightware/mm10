@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 import { resolveIcon } from '@/lib/icons';
-import type { NavItem } from '@/config/menu';
+import type { NavItem } from '@/config/business';
 
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

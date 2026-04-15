@@ -41,6 +41,26 @@ export const contentConfig = {
     clientSubtitle: 'Bem-vindo à tua plataforma de trading',
     adminTitle: 'Painel Admin',
     adminSubtitle: 'Visão geral da plataforma',
+    stats: [
+      { key: 'courses', label: 'Cursos Activos',    defaultValue: '—', iconKey: 'GraduationCap' },
+      { key: 'trades',  label: 'Trades Registados', defaultValue: '—', iconKey: 'BarChart3'     },
+      { key: 'winRate', label: 'Win Rate',           defaultValue: '—', iconKey: 'TrendingUp'   },
+      { key: 'booking', label: 'Próxima Reunião',    defaultValue: '—', iconKey: 'Calendar'     },
+    ],
+    quickActions: [
+      { key: 'chat',     label: 'Chat IA',          path: '/app/chat',     iconKey: 'Radio',         desc: 'Fala com o assistente de IA' },
+      { key: 'courses',  label: 'Cursos',           path: '/app/courses',  iconKey: 'GraduationCap', desc: 'Continua a aprender'         },
+      { key: 'trades',   label: 'Trading Journal',  path: '/app/trades',   iconKey: 'BarChart3',     desc: 'Regista as tuas operações'   },
+      { key: 'bookings', label: 'Reservar Reunião', path: '/app/bookings', iconKey: 'Calendar',      desc: 'Agenda com o mentor'         },
+    ],
+    broadcastsHeading:   'Broadcasts Recentes',
+    broadcastsViewAll:   'Ver todos',
+    quickActionsHeading: 'Acções Rápidas',
+    priorityLabels: {
+      normal: 'Normal',
+      high:   'Alta',
+      urgent: 'Urgente',
+    },
   },
 
   auth: {
