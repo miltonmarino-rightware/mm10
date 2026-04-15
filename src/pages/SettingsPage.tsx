@@ -1,6 +1,7 @@
 import React from 'react';
 import { PageTransition, FadeIn } from '@/components/common/PageTransition';
 import { User, Palette, Bell, Globe, CreditCard, Shield, Monitor } from 'lucide-react';
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 const Section: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode; delay?: number }> = ({
   title, icon, children, delay = 0,
@@ -47,55 +48,60 @@ const InfoRow: React.FC<{ label: string; value: string }> = ({ label, value }) =
   </div>
 );
 
-const SettingsPage: React.FC = () => (
-  <PageTransition className="flex-1 overflow-y-auto scrollbar-thin">
-    <div className="max-w-2xl mx-auto px-4 md:px-8 py-8 space-y-5">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Definições</h1>
-        <p className="text-muted-foreground text-sm mt-1">Personaliza a tua experiência no Tarik Forex AI.</p>
+const SettingsPage: React.FC = () => {
+  const { content, brand } = useBusinessConfig();
+  const c = content.settings;
+
+  return (
+    <PageTransition className="flex-1 overflow-y-auto scrollbar-thin">
+      <div className="max-w-2xl mx-auto px-4 md:px-8 py-8 space-y-5">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-foreground">{c.title}</h1>
+          <p className="text-muted-foreground text-sm mt-1">{c.subtitle}</p>
+        </div>
+
+        <Section title="Perfil" icon={<User size={20} />} delay={0.05}>
+          <InfoRow label="Nome" value="Trader" />
+          <InfoRow label="Email" value="trader@example.com" />
+          <InfoRow label="Membro desde" value="Março 2026" />
+        </Section>
+
+        <Section title="Interface" icon={<Monitor size={20} />} delay={0.1}>
+          <ToggleRow label="Modo escuro" description="Sempre activo nesta versão" defaultOn />
+          <ToggleRow label="Animações" description="Transições e motion design" defaultOn />
+          <ToggleRow label="Som de notificação" description="Feedback sonoro ao receber resposta" />
+        </Section>
+
+        <Section title="Experiência" icon={<Palette size={20} />} delay={0.15}>
+          <ToggleRow label="Respostas compactas" description="Reduzir espaçamento entre mensagens" />
+          <ToggleRow label="Sugestões automáticas" description="Mostrar prompts sugeridos" defaultOn />
+        </Section>
+
+        <Section title="Notificações" icon={<Bell size={20} />} delay={0.2}>
+          <ToggleRow label="Alertas de mercado" description="Receber notificações sobre movimentos relevantes" />
+          <ToggleRow label="Updates do produto" description={`Novidades e melhorias do ${brand.name}`} defaultOn />
+        </Section>
+
+        <Section title="Idioma" icon={<Globe size={20} />} delay={0.25}>
+          <InfoRow label="Idioma actual" value="Português (PT)" />
+          <p className="text-xs text-muted-foreground mt-2">Mais idiomas disponíveis em breve.</p>
+        </Section>
+
+        <Section title="Plano" icon={<CreditCard size={20} />} delay={0.3}>
+          <InfoRow label="Plano actual" value="Free" />
+          <InfoRow label="Mensagens restantes" value="∞" />
+          <button className="mt-4 w-full py-2.5 rounded-xl bg-primary/10 border border-primary/20 text-primary text-sm font-medium hover:bg-primary/20 transition-colors">
+            {c.upgradeLabel}
+          </button>
+        </Section>
+
+        <Section title="Segurança" icon={<Shield size={20} />} delay={0.35}>
+          <ToggleRow label="Autenticação 2FA" description="Em breve disponível" />
+          <InfoRow label="Última sessão" value="Agora" />
+        </Section>
       </div>
-
-      <Section title="Perfil" icon={<User size={20} />} delay={0.05}>
-        <InfoRow label="Nome" value="Trader" />
-        <InfoRow label="Email" value="trader@example.com" />
-        <InfoRow label="Membro desde" value="Março 2026" />
-      </Section>
-
-      <Section title="Interface" icon={<Monitor size={20} />} delay={0.1}>
-        <ToggleRow label="Modo escuro" description="Sempre activo nesta versão" defaultOn />
-        <ToggleRow label="Animações" description="Transições e motion design" defaultOn />
-        <ToggleRow label="Som de notificação" description="Feedback sonoro ao receber resposta" />
-      </Section>
-
-      <Section title="Experiência" icon={<Palette size={20} />} delay={0.15}>
-        <ToggleRow label="Respostas compactas" description="Reduzir espaçamento entre mensagens" />
-        <ToggleRow label="Sugestões automáticas" description="Mostrar prompts sugeridos" defaultOn />
-      </Section>
-
-      <Section title="Notificações" icon={<Bell size={20} />} delay={0.2}>
-        <ToggleRow label="Alertas de mercado" description="Receber notificações sobre movimentos relevantes" />
-        <ToggleRow label="Updates do produto" description="Novidades e melhorias do Tarik Forex AI" defaultOn />
-      </Section>
-
-      <Section title="Idioma" icon={<Globe size={20} />} delay={0.25}>
-        <InfoRow label="Idioma actual" value="Português (PT)" />
-        <p className="text-xs text-muted-foreground mt-2">Mais idiomas disponíveis em breve.</p>
-      </Section>
-
-      <Section title="Plano" icon={<CreditCard size={20} />} delay={0.3}>
-        <InfoRow label="Plano actual" value="Free" />
-        <InfoRow label="Mensagens restantes" value="∞" />
-        <button className="mt-4 w-full py-2.5 rounded-xl bg-primary/10 border border-primary/20 text-primary text-sm font-medium hover:bg-primary/20 transition-colors">
-          Upgrade para Pro — Em breve
-        </button>
-      </Section>
-
-      <Section title="Segurança" icon={<Shield size={20} />} delay={0.35}>
-        <ToggleRow label="Autenticação 2FA" description="Em breve disponível" />
-        <InfoRow label="Última sessão" value="Agora" />
-      </Section>
-    </div>
-  </PageTransition>
-);
+    </PageTransition>
+  );
+};
 
 export default SettingsPage;

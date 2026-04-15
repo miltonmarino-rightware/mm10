@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, TrendingUp, X } from 'lucide-react';
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 const items = [
   { id: '1', title: 'EUR/USD Breakout — +120 pips', desc: 'Breakout forte da consolidação no H4. Entrada no pullback após quebra com volume. Stop abaixo do range.', imageUrl: '', result: '+120 pips', date: '2026-03-15', category: 'Breakout', pair: 'EUR/USD', setup: 'Consolidation Breakout', context: 'Mercado em tendência bullish após NFP positivo.' },
@@ -16,11 +17,12 @@ const categories = ['Todos', 'Breakout', 'Reversão', 'Tendência', 'Scalp', 'Ra
 const anim = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
 export default function AppMuseum() {
+  const { brand } = useBusinessConfig();
   const [cat, setCat] = useState('Todos');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
   const [comboOpen, setComboOpen] = useState(false);
-  
+
   const filtered = items.filter(i =>
     (cat === 'Todos' || i.category === cat) &&
     i.title.toLowerCase().includes(search.toLowerCase())
@@ -33,7 +35,7 @@ export default function AppMuseum() {
 
       <motion.div variants={anim} className="text-center">
         <h1 className="text-2xl font-bold text-foreground text-glow-primary">Museu de Trades</h1>
-        <p className="text-sm text-muted-foreground mt-1">Galeria de resultados e provas sociais do Tarik</p>
+        <p className="text-sm text-muted-foreground mt-1">Galeria de resultados e provas sociais do {brand.mentorName}</p>
       </motion.div>
 
       <motion.div variants={anim} className="flex flex-col sm:flex-row gap-3">
@@ -43,8 +45,6 @@ export default function AppMuseum() {
             className="w-full h-9 pl-8 pr-3 rounded-xl bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
             placeholder="Pesquisar..." />
         </div>
-        
-        {/* Mobile: combobox, Desktop: inline buttons */}
         <div className="hidden sm:flex gap-2 overflow-x-auto pb-1">
           {categories.map(c => (
             <button key={c} onClick={() => setCat(c)}
@@ -98,7 +98,6 @@ export default function AppMuseum() {
         ))}
       </motion.div>
 
-      {/* Detail modal */}
       <AnimatePresence>
         {detail && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setSelected(null)}>
@@ -119,7 +118,6 @@ export default function AppMuseum() {
                 <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded">{detail.category}</span>
               </div>
               <h2 className="text-lg font-bold text-foreground mb-2">{detail.title}</h2>
-              
               <div className="space-y-3 mb-4">
                 <div>
                   <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Setup</p>
@@ -134,7 +132,6 @@ export default function AppMuseum() {
                   <p className="text-sm text-muted-foreground leading-relaxed">{detail.context}</p>
                 </div>
               </div>
-              
               <p className="text-xs text-muted-foreground">{detail.date}</p>
             </motion.div>
           </div>

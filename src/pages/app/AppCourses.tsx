@@ -1,36 +1,29 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GraduationCap, Play, Clock, BookOpen, Search, Star } from 'lucide-react';
-
-const courses = [
-  { id: '1', title: 'Forex Fundamentos', desc: 'Aprende as bases do mercado Forex', modules: 8, duration: '4h 30m', progress: 65, category: 'Iniciante', featured: true, thumbnail: '' },
-  { id: '2', title: 'Price Action Avançado', desc: 'Domina price action e estrutura de mercado', modules: 12, duration: '7h 15m', progress: 30, category: 'Avançado', featured: true, thumbnail: '' },
-  { id: '3', title: 'Gestão de Risco', desc: 'Protege o teu capital como profissional', modules: 6, duration: '3h', progress: 0, category: 'Intermédio', featured: false, thumbnail: '' },
-  { id: '4', title: 'Psicologia de Trading', desc: 'Controla as emoções e toma decisões racionais', modules: 10, duration: '5h 45m', progress: 0, category: 'Todos', featured: false, thumbnail: '' },
-  { id: '5', title: 'Análise Técnica', desc: 'Indicadores, padrões e confluências', modules: 14, duration: '8h', progress: 100, category: 'Intermédio', featured: true, thumbnail: '' },
-  { id: '6', title: 'Trading com Notícias', desc: 'Opera com base em eventos fundamentais', modules: 5, duration: '2h 30m', progress: 0, category: 'Avançado', featured: false, thumbnail: '' },
-];
-
-const categories = ['Todos', 'Iniciante', 'Intermédio', 'Avançado'];
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 const anim = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
 export default function AppCourses() {
-  const [cat, setCat] = useState('Todos');
+  const { brand, menu } = useBusinessConfig();
+  const courses = menu.products;
+  const categoryList = menu.categories;
+
+  const [cat, setCat] = useState('all');
   const [search, setSearch] = useState('');
 
   const filtered = courses.filter(c =>
-    (cat === 'Todos' || c.category === cat) &&
+    (cat === 'all' || c.category === categoryList.find(ct => ct.id === cat)?.label) &&
     c.title.toLowerCase().includes(search.toLowerCase())
   );
   const featured = courses.filter(c => c.featured);
-  const inProgress = courses.filter(c => c.progress > 0 && c.progress < 100);
+  const inProgress = courses.filter(c => (c.progress ?? 0) > 0 && (c.progress ?? 0) < 100);
 
   return (
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }}
       className="p-4 lg:p-8 space-y-8 max-w-7xl mx-auto">
 
-      {/* Hero */}
       <motion.div variants={anim}
         className="bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 rounded-2xl p-6 lg:p-10">
         <div className="flex items-center gap-2 mb-3">
@@ -39,11 +32,10 @@ export default function AppCourses() {
         </div>
         <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-2">Cursos de Trading</h1>
         <p className="text-muted-foreground max-w-lg text-sm leading-relaxed">
-          Conteúdo exclusivo criado pelo Tarik para te transformar num trader consistente e rentável.
+          Conteúdo exclusivo criado pelo {brand.mentorName} para te transformar num trader consistente e rentável.
         </p>
       </motion.div>
 
-      {/* Continue learning */}
       {inProgress.length > 0 && (
         <motion.div variants={anim}>
           <h2 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -68,7 +60,6 @@ export default function AppCourses() {
         </motion.div>
       )}
 
-      {/* Featured */}
       <motion.div variants={anim}>
         <h2 className="text-sm font-semibold text-foreground mb-3">Em Destaque</h2>
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin -mx-4 px-4 lg:mx-0 lg:px-0">
@@ -82,7 +73,7 @@ export default function AppCourses() {
               </div>
               <div className="p-4">
                 <p className="font-semibold text-foreground text-sm mb-1">{c.title}</p>
-                <p className="text-xs text-muted-foreground line-clamp-2">{c.desc}</p>
+                <p className="text-xs text-muted-foreground line-clamp-2">{c.description}</p>
                 <div className="flex items-center gap-3 mt-3 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1"><BookOpen size={12} />{c.modules} módulos</span>
                   <span className="flex items-center gap-1"><Clock size={12} />{c.duration}</span>
@@ -93,7 +84,6 @@ export default function AppCourses() {
         </div>
       </motion.div>
 
-      {/* All courses */}
       <motion.div variants={anim}>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
           <h2 className="text-sm font-semibold text-foreground">Todos os Cursos</h2>
@@ -107,10 +97,10 @@ export default function AppCourses() {
           </div>
         </div>
         <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
-          {categories.map(c => (
-            <button key={c} onClick={() => setCat(c)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 ${cat === c ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground hover:text-foreground'}`}>
-              {c}
+          {categoryList.map(c => (
+            <button key={c.id} onClick={() => setCat(c.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 ${cat === c.id ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground hover:text-foreground'}`}>
+              {c.label}
             </button>
           ))}
         </div>
@@ -125,12 +115,12 @@ export default function AppCourses() {
                   <p className="font-semibold text-foreground text-sm">{c.title}</p>
                   <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{c.category}</span>
                 </div>
-                <p className="text-xs text-muted-foreground line-clamp-1 mb-3">{c.desc}</p>
+                <p className="text-xs text-muted-foreground line-clamp-1 mb-3">{c.description}</p>
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1"><BookOpen size={12} />{c.modules}</span>
                   <span className="flex items-center gap-1"><Clock size={12} />{c.duration}</span>
                 </div>
-                {c.progress > 0 && (
+                {(c.progress ?? 0) > 0 && (
                   <div className="w-full h-1 bg-muted rounded-full overflow-hidden mt-3">
                     <div className="h-full bg-primary rounded-full" style={{ width: `${c.progress}%` }} />
                   </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, Plus, X } from 'lucide-react';
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 const weekDays = (() => {
   const days: { label: string; value: string; short: string }[] = [];
@@ -45,6 +46,7 @@ const statusStyles = {
 const anim = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
 export default function AppBookings() {
+  const { brand } = useBusinessConfig();
   const [showNew, setShowNew] = useState(false);
   const [selectedDay, setSelectedDay] = useState(weekDays[0].value);
   const [selectedSlot, setSelectedSlot] = useState('');
@@ -60,7 +62,7 @@ export default function AppBookings() {
       <motion.div variants={anim} className="flex items-center justify-between">
         <div className="text-center flex-1">
           <h1 className="text-2xl font-bold text-foreground text-glow-primary">Reservas</h1>
-          <p className="text-sm text-muted-foreground mt-1">Agenda reuniões com o Tarik</p>
+          <p className="text-sm text-muted-foreground mt-1">Agenda reuniões com o {brand.mentorName}</p>
         </div>
         <button onClick={() => setShowNew(!showNew)}
           className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-primary/90 glow-primary-sm transition-all active:scale-[0.98]">
@@ -79,11 +81,8 @@ export default function AppBookings() {
                 className="w-full h-10 px-3 rounded-xl bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                 placeholder="Ex: Revisão de trades" />
             </div>
-
-            {/* Day selector */}
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Dia</label>
-              {/* Desktop: inline buttons */}
               <div className="hidden sm:flex gap-2 flex-wrap">
                 {weekDays.map(d => (
                   <button key={d.value} onClick={() => { setSelectedDay(d.value); setSelectedSlot(''); }}
@@ -92,7 +91,6 @@ export default function AppBookings() {
                   </button>
                 ))}
               </div>
-              {/* Mobile: combobox */}
               <div className="sm:hidden relative">
                 <button onClick={() => setDayComboOpen(!dayComboOpen)}
                   className="w-full h-10 px-3 rounded-xl bg-secondary border border-border text-sm text-foreground flex items-center justify-between">
@@ -114,8 +112,6 @@ export default function AppBookings() {
                 </AnimatePresence>
               </div>
             </div>
-
-            {/* Slot selector */}
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Horário</label>
               <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
@@ -130,7 +126,6 @@ export default function AppBookings() {
                 })}
               </div>
             </div>
-
             <div className="flex gap-2">
               <button disabled={!selectedSlot || !topic}
                 className="bg-primary text-primary-foreground font-semibold text-sm px-6 py-2.5 rounded-xl hover:bg-primary/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]">

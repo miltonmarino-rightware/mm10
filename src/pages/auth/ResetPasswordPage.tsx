@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Loader2, ArrowLeft, Mail } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const { resetPassword, loading } = useAuth();
+  const { content } = useBusinessConfig();
+  const c = content.auth;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,19 +25,19 @@ export default function ResetPasswordPage() {
           <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
             <Mail size={24} className="text-primary" />
           </div>
-          <h2 className="text-lg font-bold text-foreground mb-2">Email enviado</h2>
+          <h2 className="text-lg font-bold text-foreground mb-2">{c.resetSuccessTitle}</h2>
           <p className="text-sm text-muted-foreground mb-6">
-            Se o email existir na nossa base de dados, receberás instruções para redefinir a password.
+            {c.resetSuccessMessage}
           </p>
           <Link to="/auth/login" className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1">
-            <ArrowLeft size={14} /> Voltar ao login
+            <ArrowLeft size={14} /> {c.backToLogin}
           </Link>
         </div>
       ) : (
         <>
           <div className="text-center mb-6">
-            <h1 className="text-xl font-bold text-foreground">Recuperar password</h1>
-            <p className="text-sm text-muted-foreground mt-1">Indica o teu email para receber instruções</p>
+            <h1 className="text-xl font-bold text-foreground">{c.resetTitle}</h1>
+            <p className="text-sm text-muted-foreground mt-1">{c.resetSubtitle}</p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -45,11 +48,11 @@ export default function ResetPasswordPage() {
             </div>
             <button type="submit" disabled={loading}
               className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 glow-primary transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-              {loading ? <Loader2 size={18} className="animate-spin" /> : 'Enviar instruções'}
+              {loading ? <Loader2 size={18} className="animate-spin" /> : c.resetButton}
             </button>
             <p className="text-center text-sm text-muted-foreground">
               <Link to="/auth/login" className="text-primary hover:underline inline-flex items-center gap-1">
-                <ArrowLeft size={14} /> Voltar ao login
+                <ArrowLeft size={14} /> {c.backToLogin}
               </Link>
             </p>
           </form>

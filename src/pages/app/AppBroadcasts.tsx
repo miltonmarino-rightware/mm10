@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Radio, Bell, Volume2, Video, FileText, Filter } from 'lucide-react';
+import { Radio, Bell, Volume2, Video, FileText } from 'lucide-react';
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 const broadcasts = [
   { id: '1', title: 'Sinal EUR/USD — Compra no suporte', content: 'Entry: 1.0850, TP: 1.0920, SL: 1.0810', type: 'alert' as const, priority: 'urgent' as const, date: 'Hoje, 14:30', read: false },
@@ -21,6 +22,7 @@ const priorityStyles = {
 const anim = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
 export default function AppBroadcasts() {
+  const { brand } = useBusinessConfig();
   const [filter, setFilter] = useState<'all' | 'alert' | 'text' | 'video' | 'audio'>('all');
   const filtered = filter === 'all' ? broadcasts : broadcasts.filter(b => b.type === filter);
   const unread = broadcasts.filter(b => !b.read).length;
@@ -36,10 +38,9 @@ export default function AppBroadcasts() {
             <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full">{unread}</span>
           )}
         </div>
-        <p className="text-sm text-muted-foreground mt-1">Mensagens, sinais e alertas do Tarik</p>
+        <p className="text-sm text-muted-foreground mt-1">Mensagens, sinais e alertas do {brand.mentorName}</p>
       </motion.div>
 
-      {/* Filters */}
       <motion.div variants={anim} className="flex gap-2 overflow-x-auto pb-1">
         {([['all', 'Todos'], ['alert', 'Sinais'], ['text', 'Texto'], ['video', 'Vídeo'], ['audio', 'Áudio']] as const).map(([key, label]) => (
           <button key={key} onClick={() => setFilter(key)}
@@ -49,7 +50,6 @@ export default function AppBroadcasts() {
         ))}
       </motion.div>
 
-      {/* List */}
       <motion.div variants={anim} className="space-y-2">
         {filtered.map(b => {
           const Icon = typeIcons[b.type];

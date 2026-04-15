@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Send, Image, Video, Users, Hash } from 'lucide-react';
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 interface Conversation {
   id: string;
@@ -20,31 +21,33 @@ interface Message {
   isMine: boolean;
 }
 
-const conversations: Conversation[] = [
-  { id: '1', name: 'Tarik', type: 'direct', avatar: 'T', lastMessage: 'Excelente trade hoje! Continua assim.', time: '14:30', unread: 2 },
-  { id: '2', name: 'Turma Forex Iniciante', type: 'group', avatar: '#', lastMessage: 'João: Alguém viu o setup no EUR/USD?', time: '12:15', unread: 5 },
-  { id: '3', name: 'Ana Costa', type: 'direct', avatar: 'A', lastMessage: 'Obrigada pela dica!', time: 'Ontem', unread: 0 },
-  { id: '4', name: 'Price Action Pro', type: 'group', avatar: '#', lastMessage: 'Tarik: Análise do GBP/JPY enviada', time: 'Ontem', unread: 0 },
-  { id: '5', name: 'Miguel Santos', type: 'direct', avatar: 'M', lastMessage: 'Vamos discutir o setup amanhã?', time: '15 Mar', unread: 0 },
-];
-
-const mockMessages: Record<string, Message[]> = {
-  '1': [
-    { id: '1', content: 'Olá Tarik, posso partilhar o meu trade de hoje?', sender: 'Eu', time: '14:20', isMine: true },
-    { id: '2', content: 'Claro! Mostra-me o setup e o resultado.', sender: 'Tarik', time: '14:22', isMine: false },
-    { id: '3', content: 'Fiz um buy no EUR/USD no suporte do H4, +45 pips!', sender: 'Eu', time: '14:25', isMine: true },
-    { id: '4', content: 'Excelente trade hoje! Continua assim. A entrada foi muito limpa.', sender: 'Tarik', time: '14:30', isMine: false },
-  ],
-  '2': [
-    { id: '1', content: 'Bom dia pessoal! Alguém está a operar hoje?', sender: 'Tarik', time: '09:00', isMine: false },
-    { id: '2', content: 'Sim! Estou a olhar para o EUR/USD.', sender: 'Eu', time: '09:15', isMine: true },
-    { id: '3', content: 'Alguém viu o setup no EUR/USD?', sender: 'João', time: '12:15', isMine: false },
-  ],
-};
-
 const anim = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
 export default function AppMessages() {
+  const { brand } = useBusinessConfig();
+
+  const conversations: Conversation[] = [
+    { id: '1', name: brand.mentorName, type: 'direct', avatar: brand.mentorName[0], lastMessage: 'Excelente trade hoje! Continua assim.', time: '14:30', unread: 2 },
+    { id: '2', name: 'Turma Forex Iniciante', type: 'group', avatar: '#', lastMessage: 'João: Alguém viu o setup no EUR/USD?', time: '12:15', unread: 5 },
+    { id: '3', name: 'Ana Costa', type: 'direct', avatar: 'A', lastMessage: 'Obrigada pela dica!', time: 'Ontem', unread: 0 },
+    { id: '4', name: 'Price Action Pro', type: 'group', avatar: '#', lastMessage: `${brand.mentorName}: Análise do GBP/JPY enviada`, time: 'Ontem', unread: 0 },
+    { id: '5', name: 'Miguel Santos', type: 'direct', avatar: 'M', lastMessage: 'Vamos discutir o setup amanhã?', time: '15 Mar', unread: 0 },
+  ];
+
+  const mockMessages: Record<string, Message[]> = {
+    '1': [
+      { id: '1', content: `Olá ${brand.mentorName}, posso partilhar o meu trade de hoje?`, sender: 'Eu', time: '14:20', isMine: true },
+      { id: '2', content: 'Claro! Mostra-me o setup e o resultado.', sender: brand.mentorName, time: '14:22', isMine: false },
+      { id: '3', content: 'Fiz um buy no EUR/USD no suporte do H4, +45 pips!', sender: 'Eu', time: '14:25', isMine: true },
+      { id: '4', content: 'Excelente trade hoje! Continua assim. A entrada foi muito limpa.', sender: brand.mentorName, time: '14:30', isMine: false },
+    ],
+    '2': [
+      { id: '1', content: 'Bom dia pessoal! Alguém está a operar hoje?', sender: brand.mentorName, time: '09:00', isMine: false },
+      { id: '2', content: 'Sim! Estou a olhar para o EUR/USD.', sender: 'Eu', time: '09:15', isMine: true },
+      { id: '3', content: 'Alguém viu o setup no EUR/USD?', sender: 'João', time: '12:15', isMine: false },
+    ],
+  };
+
   const [activeConv, setActiveConv] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
 
@@ -96,7 +99,6 @@ export default function AppMessages() {
         ) : (
           <motion.div key="chat" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
             className="flex-1 flex flex-col">
-            {/* Chat header */}
             <div className="h-12 border-b border-border flex items-center gap-3 px-4 shrink-0">
               <button onClick={() => setActiveConv(null)} className="p-1 text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary transition-colors">
                 <ArrowLeft size={20} />
@@ -112,7 +114,6 @@ export default function AppMessages() {
               </div>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto scrollbar-thin p-4 space-y-3">
               {messages.map(msg => (
                 <div key={msg.id} className={`flex ${msg.isMine ? 'justify-end' : 'justify-start'}`}>
@@ -127,7 +128,6 @@ export default function AppMessages() {
               ))}
             </div>
 
-            {/* Composer */}
             <div className="border-t border-border p-3 shrink-0">
               <div className="flex items-center gap-2 max-w-3xl mx-auto">
                 <button className="p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary transition-colors shrink-0">

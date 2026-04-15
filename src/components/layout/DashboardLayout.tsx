@@ -1,55 +1,22 @@
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Menu, X, LayoutDashboard, MessageSquare, GraduationCap,
-  BarChart3, Radio, Calendar, Users, Trophy, Image, User,
-  LogOut, Shield, ChevronLeft, Mail
-} from 'lucide-react';
+import { Menu, X, LogOut, Shield, ChevronLeft, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
-import tarikLogo from '@/assets/tarik-logo.jpeg';
-
-const clientNav = [
-  { path: '/app', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-  { path: '/app/chat', label: 'Chat IA', icon: MessageSquare },
-  { path: '/app/courses', label: 'Cursos', icon: GraduationCap },
-  { path: '/app/trades', label: 'Trading Journal', icon: BarChart3 },
-  { path: '/app/broadcasts', label: 'Broadcasts', icon: Radio },
-  { path: '/app/bookings', label: 'Reservas', icon: Calendar },
-  { path: '/app/groups', label: 'Grupos', icon: Users },
-  { path: '/app/messages', label: 'Mensagens', icon: Mail },
-  { path: '/app/events', label: 'Eventos', icon: Trophy },
-  { path: '/app/museum', label: 'Museu', icon: Image },
-  { path: '/app/profile', label: 'Perfil', icon: User },
-];
-
-const adminNav = [
-  { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-  { path: '/admin/students', label: 'Alunos', icon: Users },
-  { path: '/admin/courses', label: 'Cursos', icon: GraduationCap },
-  { path: '/admin/broadcasts', label: 'Broadcasts', icon: Radio },
-  { path: '/admin/trades', label: 'Trading Journal', icon: BarChart3 },
-  { path: '/admin/bookings', label: 'Reservas', icon: Calendar },
-  { path: '/admin/groups', label: 'Grupos', icon: Users },
-  { path: '/admin/messages', label: 'Mensagens', icon: Mail },
-  { path: '/admin/events', label: 'Eventos', icon: Trophy },
-  { path: '/admin/museum', label: 'Museu', icon: Image },
-];
-
-interface NavItem { path: string; label: string; icon: React.ElementType; exact?: boolean; }
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
+import { resolveIcon } from '@/lib/icons';
+import type { NavItem } from '@/config/menu';
 
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { brand, content, menu } = useBusinessConfig();
 
   const isAdmin = user?.role === 'admin';
-  const navItems: NavItem[] = isAdmin ? adminNav : clientNav;
-
-  const isActive = (item: NavItem) =>
-    item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path) && !(item.exact === undefined && location.pathname === item.path.split('/').slice(0, -1).join('/'));
+  const navItems = isAdmin ? menu.adminNav : menu.clientNav;
 
   const isActiveCheck = (item: NavItem) =>
     item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path);
@@ -62,10 +29,10 @@ export default function DashboardLayout() {
     <div className="flex flex-col h-full">
       <div className="p-4 flex items-center gap-3 mb-2">
         <div className="w-10 h-10 rounded-xl overflow-hidden border border-primary/20 glow-primary-sm shrink-0">
-          <img src={tarikLogo} alt="Tarik" className="w-full h-full object-cover" />
+          <img src={brand.logo} alt={brand.logoAlt} className="w-full h-full object-cover" />
         </div>
         <div className="min-w-0">
-          <span className="font-semibold text-foreground text-sm block truncate">Tarik Forex AI</span>
+          <span className="font-semibold text-foreground text-sm block truncate">{brand.name}</span>
           {isAdmin && (
             <span className="text-[10px] font-medium text-primary flex items-center gap-1">
               <Shield size={10} /> Admin
@@ -77,6 +44,7 @@ export default function DashboardLayout() {
       <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto scrollbar-thin">
         {navItems.map(item => {
           const active = isActiveCheck(item);
+          const Icon = resolveIcon(item.iconKey);
           return (
             <Link
               key={item.path}
@@ -89,7 +57,7 @@ export default function DashboardLayout() {
                   : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               )}
             >
-              <item.icon size={18} className={active ? 'text-primary' : ''} />
+              <Icon size={18} className={active ? 'text-primary' : ''} />
               <span>{item.label}</span>
             </Link>
           );
@@ -100,7 +68,7 @@ export default function DashboardLayout() {
         <div className="px-3 pb-2">
           <Link to="/app" onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-all">
-            <MessageSquare size={14} /> Ver como cliente
+            <MessageSquare size={14} /> {content.nav.viewAsClient}
           </Link>
         </div>
       )}
@@ -108,7 +76,7 @@ export default function DashboardLayout() {
         <div className="px-3 pb-2">
           <Link to="/admin" onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-primary/70 hover:text-primary hover:bg-primary/5 transition-all">
-            <Shield size={14} /> Painel Admin
+            <Shield size={14} /> {content.nav.adminPanel}
           </Link>
         </div>
       )}
@@ -182,7 +150,7 @@ export default function DashboardLayout() {
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" />
             <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              {isAdmin ? 'Admin Panel' : 'Tarik Forex AI'}
+              {isAdmin ? content.header.adminLabel : brand.name}
             </span>
           </div>
           <div className="w-8 lg:hidden" />
