@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -11,24 +12,26 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const { register, loading } = useAuth();
   const navigate = useNavigate();
+  const { content } = useBusinessConfig();
+  const c = content.auth;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (password.length < 6) { setError('A password deve ter pelo menos 6 caracteres.'); return; }
+    if (password.length < 6) { setError(c.passwordMinLength); return; }
     try {
       await register(name, email, password);
       navigate('/app');
     } catch {
-      setError('Erro ao criar conta. Tenta novamente.');
+      setError(c.registerError);
     }
   };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
       <div className="text-center mb-6">
-        <h1 className="text-xl font-bold text-foreground">Criar conta</h1>
-        <p className="text-sm text-muted-foreground mt-1">Começa a tua jornada no Forex</p>
+        <h1 className="text-xl font-bold text-foreground">{c.registerTitle}</h1>
+        <p className="text-sm text-muted-foreground mt-1">{c.registerSubtitle}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -57,11 +60,11 @@ export default function RegisterPage() {
 
         <button type="submit" disabled={loading}
           className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 glow-primary transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-          {loading ? <Loader2 size={18} className="animate-spin" /> : <><span>Criar conta</span><ArrowRight size={16} /></>}
+          {loading ? <Loader2 size={18} className="animate-spin" /> : <><span>{c.registerButton}</span><ArrowRight size={16} /></>}
         </button>
 
         <p className="text-center text-sm text-muted-foreground pt-2">
-          Já tens conta?{' '}<Link to="/auth/login" className="text-primary font-medium hover:underline">Entrar</Link>
+          {c.hasAccount}{' '}<Link to="/auth/login" className="text-primary font-medium hover:underline">{c.loginLink}</Link>
         </p>
       </form>
     </motion.div>
