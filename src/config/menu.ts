@@ -6,20 +6,21 @@ export interface NavItem {
 }
 
 export interface Category {
-  id: string;
+  id:    string;
   label: string;
+  image: string;   // string path only — /assets/categories/...
 }
 
 export interface Product {
-  id: string;
-  title: string;
-  description: string;
-  modules?: number;
-  duration?: string;
-  progress?: number;
-  category: string;
-  featured?: boolean;
-  thumbnail?: string;
+  id:           string;
+  title:        string;
+  description:  string;
+  modules?:     number;
+  duration?:    string;
+  progress?:    number;
+  category:     string;
+  featured?:    boolean;
+  thumbnail?:   string;   // string path only — /assets/courses/...
 }
 
 export const clientNav: NavItem[] = [
@@ -50,17 +51,19 @@ export const adminNav: NavItem[] = [
 ];
 
 export const categories: Category[] = [
-  { id: 'all', label: 'Todos' },
-  { id: 'iniciante', label: 'Iniciante' },
-  { id: 'intermedio', label: 'Intermédio' },
-  { id: 'avancado', label: 'Avançado' },
+  { id: 'all',        label: 'Todos',           image: '/assets/categories/all.jpg'          },
+  { id: 'iniciante',  label: 'Iniciante',        image: '/assets/categories/beginner.jpg'     },
+  { id: 'intermedio', label: 'Intermédio',       image: '/assets/categories/intermediate.jpg' },
+  { id: 'avancado',   label: 'Avançado',         image: '/assets/categories/advanced.jpg'     },
+  { id: 'psicologia', label: 'Psicologia',       image: '/assets/categories/psychology.jpg'   },
+  { id: 'pratico',    label: 'Prático ao Vivo',  image: '/assets/categories/live.jpg'         },
 ];
 
 export const products: Product[] = [
-  { id: '1', title: 'Forex Fundamentos', description: 'Aprende as bases do mercado Forex', modules: 8, duration: '4h 30m', progress: 65, category: 'Iniciante', featured: true },
-  { id: '2', title: 'Price Action Avançado', description: 'Domina price action e estrutura de mercado', modules: 12, duration: '7h 15m', progress: 30, category: 'Avançado', featured: true },
-  { id: '3', title: 'Gestão de Risco', description: 'Protege o teu capital como profissional', modules: 6, duration: '3h', progress: 0, category: 'Intermédio', featured: false },
-  { id: '4', title: 'Psicologia de Trading', description: 'Controla as emoções e toma decisões racionais', modules: 10, duration: '5h 45m', progress: 0, category: 'Todos', featured: false },
-  { id: '5', title: 'Análise Técnica', description: 'Indicadores, padrões e confluências', modules: 14, duration: '8h', progress: 100, category: 'Intermédio', featured: true },
-  { id: '6', title: 'Trading com Notícias', description: 'Opera com base em eventos fundamentais', modules: 5, duration: '2h 30m', progress: 0, category: 'Avançado', featured: false },
+  { id: '1', title: 'Forex Fundamentos', description: 'Aprende as bases do mercado Forex', modules: 8, duration: '4h 30m', progress: 65, category: 'Iniciante', featured: true, thumbnail: '/assets/courses/forex-fundamentos.jpg' },
+  { id: '2', title: 'Price Action Avançado', description: 'Domina price action e estrutura de mercado', modules: 12, duration: '7h 15m', progress: 30, category: 'Avançado', featured: true, thumbnail: '/assets/courses/price-action.jpg' },
+  { id: '3', title: 'Gestão de Risco', description: 'Protege o teu capital como profissional', modules: 6, duration: '3h', progress: 0, category: 'Intermédio', featured: false, thumbnail: '/assets/courses/gestao-risco.jpg' },
+  { id: '4', title: 'Psicologia de Trading', description: 'Controla as emoções e toma decisões racionais', modules: 10, duration: '5h 45m', progress: 0, category: 'Todos', featured: false, thumbnail: '/assets/courses/psicologia.jpg' },
+  { id: '5', title: 'Análise Técnica', description: 'Indicadores, padrões e confluências', modules: 14, duration: '8h', progress: 100, category: 'Intermédio', featured: true, thumbnail: '/assets/courses/analise-tecnica.jpg' },
+  { id: '6', title: 'Trading com Notícias', description: 'Opera com base em eventos fundamentais', modules: 5, duration: '2h 30m', progress: 0, category: 'Avançado', featured: false, thumbnail: '/assets/courses/trading-noticias.jpg' },
 ];
