@@ -59,7 +59,7 @@ export default function AppCourses() {
       )}
 
       <motion.div variants={anim}>
-        <h2 className="text-sm font-semibold text-foreground mb-3">Em Destaque</h2>
+        <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">Em Destaque</h2>
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin -mx-4 px-4 lg:mx-0 lg:px-0">
           {featured.map(c => (
             <div key={c.id} className="min-w-[260px] lg:min-w-[300px] bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/20 transition-all cursor-pointer shrink-0 group">
