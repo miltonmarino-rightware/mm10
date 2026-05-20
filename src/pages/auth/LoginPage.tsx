@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const { login, loading } = useAuth();
   const navigate = useNavigate();
-  const { brand, content } = useBusinessConfig();
+  const { content } = useBusinessConfig();
   const c = content.auth;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,8 +32,14 @@ export default function LoginPage() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
       <div className="text-center mb-6">
-        <h1 className="text-xl font-bold text-foreground">{c.loginTitle}</h1>
-        <p className="text-sm text-muted-foreground mt-1">{c.loginSubtitle}</p>
+        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
+          Money Makers · Members
+        </p>
+        <h1 className="text-2xl font-semibold text-foreground tracking-tight">
+          {c.loginTitle.split(' ').slice(0, -1).join(' ')}{' '}
+          <span className="font-serif-italic">{c.loginTitle.split(' ').slice(-1)}</span>
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2">{c.loginSubtitle}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -81,14 +87,6 @@ export default function LoginPage() {
           </Link>
         </p>
       </form>
-
-      {brand.demoHint && (
-        <div className="mt-4 pt-4 border-t border-border">
-          <p className="text-[11px] text-muted-foreground text-center">
-            {brand.demoHint.label}
-          </p>
-        </div>
-      )}
     </motion.div>
   );
 }
