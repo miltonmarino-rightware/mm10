@@ -25,10 +25,7 @@ serif:     "'Instrument Serif', serif",
 importUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap',
 },
 
-demoHint: {
-adminEmail: 'admin@moneymakers.com',
-label:      'Demo: usa admin@moneymakers.com para admin ou qualquer email para membro',
-} as { adminEmail: string; label: string } | null,
+demoHint: null as { adminEmail: string; label: string } | null,
 } as const;
 
 export type BrandConfig = typeof brandConfig;

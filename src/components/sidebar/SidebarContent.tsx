@@ -24,7 +24,7 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onNavigate }) =>
     <div className="flex flex-col h-full p-4">
       {/* Brand */}
       <div className="flex items-center gap-3 px-2 mb-6">
-        <div className="w-9 h-9 rounded-xl overflow-hidden border border-primary/20 glow-teal-sm shrink-0">
+        <div className="w-9 h-9 rounded-xl overflow-hidden border border-primary/20 glow-primary-sm shrink-0">
           <img src={brand.logo} alt={brand.logoAlt} className="w-full h-full object-cover" />
         </div>
         <span className="font-semibold tracking-tight text-foreground">{brand.name}</span>

@@ -23,8 +23,13 @@ export default function AppDashboard() {
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }}
       className="p-4 lg:p-8 space-y-6 max-w-7xl mx-auto">
       <motion.div variants={anim}>
-        <h1 className="text-2xl font-bold text-foreground">{dc.clientTitle}</h1>
-        <p className="text-sm text-muted-foreground mt-1">{dc.clientSubtitle}</p>
+        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-2">
+          {new Date().toLocaleDateString('pt-PT', { weekday: 'long', day: '2-digit', month: 'long' })}
+        </p>
+        <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+          {dc.clientTitle} <span className="font-serif-italic text-primary/90">terminal</span>
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2">{dc.clientSubtitle}</p>
       </motion.div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -36,15 +41,17 @@ export default function AppDashboard() {
               <div className="flex items-center justify-between mb-3">
                 <Icon size={18} className="text-primary" />
               </div>
-              <p className="text-2xl font-bold text-foreground">{s.defaultValue}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
+              <p className="text-2xl font-mono-num font-semibold text-foreground">{s.defaultValue}</p>
+              <p className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground mt-1">{s.label}</p>
             </motion.div>
           );
         })}
       </div>
 
       <motion.div variants={anim}>
-        <h2 className="text-sm font-semibold text-foreground mb-3">{dc.quickActionsHeading}</h2>
+        <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
+          {dc.quickActionsHeading}
+        </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {dc.quickActions.map(a => {
             const Icon = resolveIcon(a.iconKey);
@@ -62,7 +69,9 @@ export default function AppDashboard() {
 
       <motion.div variants={anim}>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-foreground">{dc.broadcastsHeading}</h2>
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            {dc.broadcastsHeading}
+          </h2>
           <Link to="/app/broadcasts" className="text-xs text-primary hover:underline flex items-center gap-1">
             {dc.broadcastsViewAll} <ArrowRight size={12} />
           </Link>

@@ -36,8 +36,16 @@ export default function AdminDashboard() {
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }}
       className="p-4 lg:p-8 space-y-6 max-w-7xl mx-auto">
       <motion.div variants={anim}>
-        <h1 className="text-2xl font-bold text-foreground">{c.adminTitle}</h1>
-        <p className="text-sm text-muted-foreground mt-1">{c.adminSubtitle}</p>
+        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">
+          Admin · Control Room
+        </p>
+        <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+          {c.adminTitle.split(' ')[0]}{' '}
+          <span className="font-serif-italic text-primary/90">
+            {c.adminTitle.split(' ').slice(1).join(' ') || 'overview'}
+          </span>
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2">{c.adminSubtitle}</p>
       </motion.div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -47,10 +55,10 @@ export default function AdminDashboard() {
             <motion.div key={s.label} variants={anim} transition={{ delay: i * 0.05 }}
               className="bg-card border border-border rounded-2xl p-4 hover:border-primary/20 transition-colors">
               <Icon size={18} className="text-primary mb-2" />
-              <p className="text-2xl font-bold text-foreground">{s.value}</p>
+              <p className="text-2xl font-mono-num font-semibold text-foreground">{s.value}</p>
               <div className="flex items-center justify-between">
-                <p className="text-xs text-muted-foreground">{s.label}</p>
-                <span className="text-[10px] text-primary font-medium">{s.change}</span>
+                <p className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">{s.label}</p>
+                <span className="text-[10px] font-mono-num text-market-up">{s.change}</span>
               </div>
             </motion.div>
           );
@@ -59,7 +67,9 @@ export default function AdminDashboard() {
 
       <div className="grid lg:grid-cols-2 gap-4">
         <motion.div variants={anim} className="bg-card border border-border rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-foreground mb-4">Actividade Recente</h3>
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-4">
+            Actividade Recente
+          </h3>
           <div className="space-y-3">
             {recentActivity.map((a, i) => {
               const Icon = resolveIcon(a.iconKey);
@@ -70,7 +80,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-foreground truncate">{a.text}</p>
-                    <p className="text-[11px] text-muted-foreground">{a.time}</p>
+                    <p className="text-[10px] font-mono text-muted-foreground mt-0.5">{a.time}</p>
                   </div>
                 </div>
               );
@@ -79,7 +89,9 @@ export default function AdminDashboard() {
         </motion.div>
 
         <motion.div variants={anim} className="bg-card border border-border rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-foreground mb-4">Acções Rápidas</h3>
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-4">
+            Acções Rápidas
+          </h3>
           <div className="grid grid-cols-2 gap-2">
             {quickLinks.map(q => {
               const Icon = resolveIcon(q.iconKey);
