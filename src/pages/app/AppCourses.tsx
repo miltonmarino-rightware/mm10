@@ -36,8 +36,8 @@ export default function AppCourses() {
 
       {inProgress.length > 0 && (
         <motion.div variants={anim}>
-          <h2 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-            <Play size={14} className="text-primary" /> Continuar a Aprender
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3 flex items-center gap-2">
+            <Play size={12} className="text-primary" /> Continuar a Aprender
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {inProgress.map(c => (
