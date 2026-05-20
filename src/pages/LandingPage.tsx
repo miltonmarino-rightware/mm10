@@ -10,7 +10,7 @@ export default function LandingPage() {
   const c = content.landing;
 
   return (
-    <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden">
+    <div className="theme-paper min-h-[100dvh] bg-background text-foreground overflow-x-hidden">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">

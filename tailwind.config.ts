@@ -14,7 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["'Plus Jakarta Sans'", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["'JetBrains Mono'", "ui-monospace", "SFMono-Regular", "monospace"],
+        serif: ["'Instrument Serif'", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -22,6 +24,25 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        navy: {
+          50:  "hsl(var(--navy-50))",
+          100: "hsl(var(--navy-100))",
+          300: "hsl(var(--navy-300))",
+          500: "hsl(var(--navy-500))",
+          700: "hsl(var(--navy-700))",
+          900: "hsl(var(--navy-900))",
+        },
+        paper: {
+          light: "hsl(var(--paper-light))",
+          DEFAULT: "hsl(var(--paper-bg))",
+          dark: "hsl(var(--paper-dark))",
+          white: "hsl(var(--paper-white))",
+        },
+        market: {
+          up:   "hsl(var(--market-up))",
+          down: "hsl(var(--market-down))",
+          warn: "hsl(var(--market-warn))",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

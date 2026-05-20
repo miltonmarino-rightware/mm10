@@ -13,7 +13,7 @@ export default function AboutPage() {
 
   return (
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }}
-      className="p-4 lg:p-8 space-y-8 max-w-4xl mx-auto">
+      className="theme-paper bg-background p-4 lg:p-8 space-y-8 max-w-4xl mx-auto rounded-2xl">
       <motion.div variants={anim} className="text-center">
         <div className="w-20 h-20 rounded-2xl overflow-hidden border border-primary/20 glow-primary-sm mx-auto mb-4">
           <img src={brand.logo} alt={brand.logoAlt} className="w-full h-full object-cover" />

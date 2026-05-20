@@ -10,17 +10,19 @@ logo:        '/assets/brand/logo.jpeg',
 logoAlt:     'Money Makers',
 
 colors: {
-primary:    '231 69% 33%',
-background: '230 51% 11%',
+primary:    '228 54% 22%',
+background: '228 73% 10%',
 foreground: '0 0% 100%',
-muted:      '220 9% 66%',
-accent:     '231 92% 18%',
+muted:      '228 20% 70%',
+accent:     '228 50% 16%',
 },
 
 fonts: {
 heading:   "'Inter', sans-serif",
 body:      "'Inter', sans-serif",
-importUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap',
+mono:      "'JetBrains Mono', monospace",
+serif:     "'Instrument Serif', serif",
+importUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap',
 },
 
 demoHint: {
