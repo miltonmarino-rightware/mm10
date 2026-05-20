@@ -27,20 +27,23 @@ export default function DashboardLayout() {
 
   const SidebarNav = () => (
     <div className="flex flex-col h-full">
-      <div className="p-4 flex items-center gap-3 mb-2">
+      <div className="p-4 flex items-center gap-3 mb-2 border-b border-border/60">
         <div className="w-10 h-10 rounded-xl overflow-hidden border border-primary/20 glow-primary-sm shrink-0">
           <img src={brand.logo} alt={brand.logoAlt} className="w-full h-full object-cover" />
         </div>
         <div className="min-w-0">
-          <span className="font-semibold text-foreground text-sm block truncate">{brand.name}</span>
+          <span className="font-semibold text-foreground text-sm block truncate tracking-tight">{brand.name}</span>
           {isAdmin && (
-            <span className="text-[10px] font-medium text-primary flex items-center gap-1">
-              <Shield size={10} /> Admin
+            <span className="text-[9px] font-mono uppercase tracking-[0.18em] text-primary flex items-center gap-1 mt-0.5">
+              <Shield size={9} /> Admin Mode
             </span>
           )}
         </div>
       </div>
 
+      <p className="px-6 pt-4 pb-2 text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground/70">
+        {isAdmin ? 'Management' : 'Terminal'}
+      </p>
       <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto scrollbar-thin">
         {navItems.map(item => {
           const active = isActiveCheck(item);
