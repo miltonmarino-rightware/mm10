@@ -25,9 +25,12 @@ export default function AppEvents() {
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }}
       className="p-4 lg:p-8 space-y-6 max-w-5xl mx-auto">
 
-      <motion.div variants={anim} className="text-center">
-        <h1 className="text-2xl font-bold text-foreground text-glow-primary">Eventos & Desafios</h1>
-        <p className="text-sm text-muted-foreground mt-1">Participa em desafios e eventos da comunidade</p>
+      <motion.div variants={anim}>
+        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">Comunidade · Arena</p>
+        <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+          Eventos & <span className="font-serif-italic text-primary/90">desafios</span>
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2">Participa em desafios e eventos da comunidade</p>
       </motion.div>
 
       {events.filter(e => e.status === 'active').map(e => (
