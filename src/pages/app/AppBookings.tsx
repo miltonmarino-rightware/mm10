@@ -146,15 +146,15 @@ export default function AppBookings() {
         {bookings.map(b => {
           const st = statusStyles[b.status];
           return (
-            <div key={b.id} className="bg-card border border-border rounded-xl p-4 hover:border-primary/10 transition-colors">
+            <div key={b.id} className="bg-card border border-border rounded-xl p-4 hover:border-primary/20 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Calendar size={14} className="text-muted-foreground" />
-                  <span className="text-sm font-medium text-foreground">{b.date}</span>
+                  <span className="text-sm font-mono-num text-foreground">{b.date}</span>
                   <Clock size={14} className="text-muted-foreground ml-1" />
-                  <span className="text-sm text-foreground">{b.time}</span>
+                  <span className="text-sm font-mono-num text-foreground">{b.time}</span>
                 </div>
-                <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold uppercase ${st.bg}`}>
+                <span className={`text-[10px] px-2 py-0.5 rounded-md font-mono uppercase tracking-[0.15em] ${st.bg}`}>
                   {st.label}
                 </span>
               </div>
