@@ -84,7 +84,7 @@ export default function AppCourses() {
 
       <motion.div variants={anim}>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-          <h2 className="text-sm font-semibold text-foreground">Todos os Cursos</h2>
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Todos os Cursos</h2>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <div className="relative flex-1 sm:flex-none">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
