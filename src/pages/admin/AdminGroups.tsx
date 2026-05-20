@@ -9,9 +9,15 @@ const anim = { hidden:{opacity:0,y:16},show:{opacity:1,y:0} };
 export default function AdminGroups(){
   return(
     <motion.div initial="hidden" animate="show" transition={{staggerChildren:0.06}} className="p-4 lg:p-8 space-y-6 max-w-5xl mx-auto">
-      <motion.div variants={anim} className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold text-foreground">Grupos & Turmas</h1><p className="text-sm text-muted-foreground mt-1">Cria e gere turmas de alunos</p></div>
-        <button className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-primary/90 glow-primary-sm transition-all"><Plus size={16}/>Nova Turma</button>
+      <motion.div variants={anim} className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">Admin · Comunidade</p>
+          <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+            Grupos & <span className="font-serif-italic text-primary/90">turmas</span>
+          </h1>
+          <p className="text-sm text-muted-foreground mt-2">Cria e gere turmas de alunos</p>
+        </div>
+        <button className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-primary/90 glow-primary-sm transition-all shrink-0"><Plus size={16}/>Nova Turma</button>
       </motion.div>
       <motion.div variants={anim} className="grid sm:grid-cols-2 gap-3">
         {groups.map(g=>(
