@@ -24,22 +24,20 @@ export default function AppCourses() {
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }}
       className="p-4 lg:p-8 space-y-8 max-w-7xl mx-auto">
 
-      <motion.div variants={anim}
-        className="bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 rounded-2xl p-6 lg:p-10">
-        <div className="flex items-center gap-2 mb-3">
-          <Star size={16} className="text-primary" />
-          <span className="text-xs font-semibold text-primary uppercase tracking-wider">Conteúdo Premium</span>
-        </div>
-        <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-2">Cursos de Trading</h1>
-        <p className="text-muted-foreground max-w-lg text-sm leading-relaxed">
+      <motion.div variants={anim}>
+        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">Academia · Premium</p>
+        <h1 className="text-3xl lg:text-4xl font-semibold text-foreground tracking-tight">
+          Cursos de <span className="font-serif-italic text-primary/90">trading</span>
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2 max-w-lg leading-relaxed">
           Conteúdo exclusivo criado pelo {brand.mentorName} para te transformar num trader consistente e rentável.
         </p>
       </motion.div>
 
       {inProgress.length > 0 && (
         <motion.div variants={anim}>
-          <h2 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-            <Play size={14} className="text-primary" /> Continuar a Aprender
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3 flex items-center gap-2">
+            <Play size={12} className="text-primary" /> Continuar a Aprender
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {inProgress.map(c => (
@@ -61,7 +59,7 @@ export default function AppCourses() {
       )}
 
       <motion.div variants={anim}>
-        <h2 className="text-sm font-semibold text-foreground mb-3">Em Destaque</h2>
+        <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">Em Destaque</h2>
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin -mx-4 px-4 lg:mx-0 lg:px-0">
           {featured.map(c => (
             <div key={c.id} className="min-w-[260px] lg:min-w-[300px] bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/20 transition-all cursor-pointer shrink-0 group">
@@ -86,7 +84,7 @@ export default function AppCourses() {
 
       <motion.div variants={anim}>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-          <h2 className="text-sm font-semibold text-foreground">Todos os Cursos</h2>
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground">Todos os Cursos</h2>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <div className="relative flex-1 sm:flex-none">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />

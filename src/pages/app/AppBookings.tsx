@@ -35,11 +35,11 @@ const bookings = [
 ];
 
 const statusStyles = {
-  pending: { bg: 'bg-warning/10 text-warning', label: 'Pendente' },
-  approved: { bg: 'bg-primary/10 text-primary', label: 'Aprovado' },
-  rejected: { bg: 'bg-destructive/10 text-destructive', label: 'Recusado' },
+  pending: { bg: 'bg-market-warn/10 text-market-warn', label: 'Pendente' },
+  approved: { bg: 'bg-market-up/10 text-market-up', label: 'Aprovado' },
+  rejected: { bg: 'bg-market-down/10 text-market-down', label: 'Recusado' },
   completed: { bg: 'bg-muted text-muted-foreground', label: 'Concluído' },
-  'no-show': { bg: 'bg-destructive/10 text-destructive', label: 'No-show' },
+  'no-show': { bg: 'bg-market-down/10 text-market-down', label: 'No-show' },
   cancelled: { bg: 'bg-muted text-muted-foreground', label: 'Cancelado' },
 };
 
@@ -59,13 +59,16 @@ export default function AppBookings() {
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }}
       className="p-4 lg:p-8 space-y-6 max-w-5xl mx-auto">
 
-      <motion.div variants={anim} className="flex items-center justify-between">
-        <div className="text-center flex-1">
-          <h1 className="text-2xl font-bold text-foreground text-glow-primary">Reservas</h1>
-          <p className="text-sm text-muted-foreground mt-1">Agenda reuniões com o {brand.mentorName}</p>
+      <motion.div variants={anim} className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">Mentoria · 1-on-1</p>
+          <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+            Reservas <span className="font-serif-italic text-primary/90">privadas</span>
+          </h1>
+          <p className="text-sm text-muted-foreground mt-2">Agenda reuniões com o {brand.mentorName}</p>
         </div>
         <button onClick={() => setShowNew(!showNew)}
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-primary/90 glow-primary-sm transition-all active:scale-[0.98]">
+          className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-primary/90 glow-primary-sm transition-all active:scale-[0.98] shrink-0">
           <Plus size={16} /> Nova Reserva
         </button>
       </motion.div>
@@ -143,15 +146,15 @@ export default function AppBookings() {
         {bookings.map(b => {
           const st = statusStyles[b.status];
           return (
-            <div key={b.id} className="bg-card border border-border rounded-xl p-4 hover:border-primary/10 transition-colors">
+            <div key={b.id} className="bg-card border border-border rounded-xl p-4 hover:border-primary/20 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Calendar size={14} className="text-muted-foreground" />
-                  <span className="text-sm font-medium text-foreground">{b.date}</span>
+                  <span className="text-sm font-mono-num text-foreground">{b.date}</span>
                   <Clock size={14} className="text-muted-foreground ml-1" />
-                  <span className="text-sm text-foreground">{b.time}</span>
+                  <span className="text-sm font-mono-num text-foreground">{b.time}</span>
                 </div>
-                <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold uppercase ${st.bg}`}>
+                <span className={`text-[10px] px-2 py-0.5 rounded-md font-mono uppercase tracking-[0.15em] ${st.bg}`}>
                   {st.label}
                 </span>
               </div>

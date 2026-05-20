@@ -36,12 +36,15 @@ export default function AdminCourses() {
 
   return (
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }} className="p-4 lg:p-8 space-y-6 max-w-5xl mx-auto">
-      <motion.div variants={anim} className="flex items-center justify-between">
-        <div className="text-center flex-1">
-          <h1 className="text-2xl font-bold text-foreground text-glow-primary">Cursos</h1>
-          <p className="text-sm text-muted-foreground mt-1">Gere os cursos premium da plataforma</p>
+      <motion.div variants={anim} className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">Admin · Academia</p>
+          <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+            Cursos <span className="font-serif-italic text-primary/90">premium</span>
+          </h1>
+          <p className="text-sm text-muted-foreground mt-2">Gere os cursos premium da plataforma</p>
         </div>
-        <button onClick={openNew} className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-primary/90 glow-primary-sm transition-all active:scale-[0.98]">
+        <button onClick={openNew} className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-primary/90 glow-primary-sm transition-all active:scale-[0.98] shrink-0">
           <Plus size={16} /> Novo Curso
         </button>
       </motion.div>

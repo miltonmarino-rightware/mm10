@@ -31,11 +31,11 @@ const initialBookings: { id: string; studentName: string; date: string; time: st
 const blockedSlots: Record<string, string[]> = {};
 
 const statusStyles: Record<string, { bg: string; label: string }> = {
-  pending: { bg: 'bg-warning/10 text-warning', label: 'Pendente' },
-  approved: { bg: 'bg-primary/10 text-primary', label: 'Aprovado' },
-  rejected: { bg: 'bg-destructive/10 text-destructive', label: 'Recusado' },
+  pending: { bg: 'bg-market-warn/10 text-market-warn', label: 'Pendente' },
+  approved: { bg: 'bg-market-up/10 text-market-up', label: 'Aprovado' },
+  rejected: { bg: 'bg-market-down/10 text-market-down', label: 'Recusado' },
   completed: { bg: 'bg-muted text-muted-foreground', label: 'Concluído' },
-  'no-show': { bg: 'bg-destructive/10 text-destructive', label: 'No-show' },
+  'no-show': { bg: 'bg-market-down/10 text-market-down', label: 'No-show' },
   cancelled: { bg: 'bg-muted text-muted-foreground', label: 'Cancelado' },
 };
 
@@ -65,9 +65,12 @@ export default function AdminBookings() {
 
   return (
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }} className="p-4 lg:p-8 space-y-6 max-w-5xl mx-auto">
-      <motion.div variants={anim} className="text-center">
-        <h1 className="text-2xl font-bold text-foreground text-glow-primary">Reservas</h1>
-        <p className="text-sm text-muted-foreground mt-1">Gere pedidos de reunião dos alunos</p>
+      <motion.div variants={anim}>
+        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">Admin · Agenda</p>
+        <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+          Pedidos de <span className="font-serif-italic text-primary/90">mentoria</span>
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2">Gere pedidos de reunião dos alunos</p>
       </motion.div>
 
       {/* Day selector */}

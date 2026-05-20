@@ -28,9 +28,12 @@ export default function AdminStudents() {
 
   return (
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.06 }} className="p-4 lg:p-8 space-y-6 max-w-7xl mx-auto">
-      <motion.div variants={anim} className="text-center">
-        <h1 className="text-2xl font-bold text-foreground text-glow-primary">Alunos</h1>
-        <p className="text-sm text-muted-foreground mt-1">Gere os teus alunos e progresso</p>
+      <motion.div variants={anim}>
+        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">Admin · Mentees</p>
+        <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+          Gestão de <span className="font-serif-italic text-primary/90">alunos</span>
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2">Gere os teus alunos e acompanha o progresso</p>
       </motion.div>
 
       <motion.div variants={anim} className="relative max-w-sm mx-auto sm:mx-0">

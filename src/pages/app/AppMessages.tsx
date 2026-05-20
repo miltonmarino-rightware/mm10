@@ -68,9 +68,12 @@ export default function AppMessages() {
           <motion.div key="list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -20 }}
             className="flex-1 overflow-y-auto scrollbar-thin">
             <div className="p-4 lg:p-8 max-w-3xl mx-auto space-y-4">
-              <div className="text-center">
-                <h1 className="text-2xl font-bold text-foreground text-glow-primary">Mensagens</h1>
-                <p className="text-sm text-muted-foreground mt-1">Conversas com traders e grupos</p>
+              <div>
+                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary mb-2">Inbox · Comunidade</p>
+                <h1 className="text-3xl font-semibold text-foreground tracking-tight">
+                  Mensagens <span className="font-serif-italic text-primary/90">directas</span>
+                </h1>
+                <p className="text-sm text-muted-foreground mt-2">Conversas com traders e grupos</p>
               </div>
               <div className="space-y-1">
                 {conversations.map(c => (
