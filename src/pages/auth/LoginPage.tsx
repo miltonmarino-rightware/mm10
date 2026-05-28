@@ -19,13 +19,10 @@ export default function LoginPage() {
     setError('');
     try {
       await login(email, password);
-      if (email.toLowerCase().includes('admin') || email.toLowerCase().includes('tarik')) {
-        navigate('/admin');
-      } else {
-        navigate('/app');
-      }
-    } catch {
-      setError(c.invalidCredentials);
+      // Redirect handled by AuthRoute once user state hydrates
+      navigate('/app');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : c.invalidCredentials);
     }
   };
 
