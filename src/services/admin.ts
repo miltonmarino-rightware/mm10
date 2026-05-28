@@ -48,7 +48,7 @@ export const adminService = {
       .select()
       .single();
 
-    if (pError) throw pError;
+    if (pError || !payment) throw pError ?? new Error('Payment not found');
 
     // If payment is linked to a subscription, activate it
     if (payment.subscription_id) {

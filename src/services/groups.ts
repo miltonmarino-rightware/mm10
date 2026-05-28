@@ -13,7 +13,7 @@ export const groupService = {
       .eq('user_id', userId);
     
     if (error) throw error;
-    return data.map(d => d.group) as Group[];
+    return (data as unknown as Array<{ group: Group }>).map(d => d.group);
   },
 
   getMembers: async (groupId: string) => {
