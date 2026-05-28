@@ -14,6 +14,71 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_notifications: {
+        Row: {
+          attempt_count: number
+          body_html: string | null
+          body_text: string | null
+          created_at: string
+          failed_at: string | null
+          failure_reason: string | null
+          id: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          payload: Json | null
+          recipient_email: string
+          related_payment_id: string | null
+          related_user_id: string | null
+          scheduled_for: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["notification_status"]
+          subject: string
+        }
+        Insert: {
+          attempt_count?: number
+          body_html?: string | null
+          body_text?: string | null
+          created_at?: string
+          failed_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          payload?: Json | null
+          recipient_email: string
+          related_payment_id?: string | null
+          related_user_id?: string | null
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["notification_status"]
+          subject: string
+        }
+        Update: {
+          attempt_count?: number
+          body_html?: string | null
+          body_text?: string | null
+          created_at?: string
+          failed_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          payload?: Json | null
+          recipient_email?: string
+          related_payment_id?: string | null
+          related_user_id?: string | null
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["notification_status"]
+          subject?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_notifications_related_payment_id_fkey"
+            columns: ["related_payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_messages: {
         Row: {
           content: string
@@ -851,7 +916,6 @@ export type Database = {
           is_read: boolean | null
           link: string | null
           title: string
-          type: Database["public"]["Enums"]["notification_type"]
           user_id: string
         }
         Insert: {
@@ -861,7 +925,6 @@ export type Database = {
           is_read?: boolean | null
           link?: string | null
           title: string
-          type: Database["public"]["Enums"]["notification_type"]
           user_id: string
         }
         Update: {
@@ -871,7 +934,6 @@ export type Database = {
           is_read?: boolean | null
           link?: string | null
           title?: string
-          type?: Database["public"]["Enums"]["notification_type"]
           user_id?: string
         }
         Relationships: [
@@ -884,47 +946,129 @@ export type Database = {
           },
         ]
       }
+      payment_methods_config: {
+        Row: {
+          account_holder: string
+          account_number: string
+          created_at: string
+          currency: string
+          display_name: string
+          display_order: number
+          icon_name: string | null
+          id: string
+          instructions: string | null
+          is_active: boolean
+          method_key: string
+          network: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_holder: string
+          account_number: string
+          created_at?: string
+          currency?: string
+          display_name: string
+          display_order?: number
+          icon_name?: string | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          method_key: string
+          network?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_holder?: string
+          account_number?: string
+          created_at?: string
+          currency?: string
+          display_name?: string
+          display_order?: number
+          icon_name?: string | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          method_key?: string
+          network?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
+          admin_notes: string | null
           amount: number
+          approved_at: string | null
+          approved_by: string | null
           created_at: string
           currency: string
           id: string
           paid_at: string | null
           payment_method: string | null
+          payment_method_id: string | null
+          plan_type: string | null
+          proof_file_path: string | null
+          proof_uploaded_at: string | null
+          rejection_reason: string | null
           status: Database["public"]["Enums"]["payment_status"]
           subscription_id: string | null
           transaction_ref: string | null
           updated_at: string
           user_id: string
+          user_notes: string | null
         }
         Insert: {
+          admin_notes?: string | null
           amount: number
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string
           currency?: string
           id?: string
           paid_at?: string | null
           payment_method?: string | null
+          payment_method_id?: string | null
+          plan_type?: string | null
+          proof_file_path?: string | null
+          proof_uploaded_at?: string | null
+          rejection_reason?: string | null
           status?: Database["public"]["Enums"]["payment_status"]
           subscription_id?: string | null
           transaction_ref?: string | null
           updated_at?: string
           user_id: string
+          user_notes?: string | null
         }
         Update: {
+          admin_notes?: string | null
           amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string
           currency?: string
           id?: string
           paid_at?: string | null
           payment_method?: string | null
+          payment_method_id?: string | null
+          plan_type?: string | null
+          proof_file_path?: string | null
+          proof_uploaded_at?: string | null
+          rejection_reason?: string | null
           status?: Database["public"]["Enums"]["payment_status"]
           subscription_id?: string | null
           transaction_ref?: string | null
           updated_at?: string
           user_id?: string
+          user_notes?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "payments_payment_method_id_fkey"
+            columns: ["payment_method_id"]
+            isOneToOne: false
+            referencedRelation: "payment_methods_config"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "payments_subscription_id_fkey"
             columns: ["subscription_id"]
@@ -940,6 +1084,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      products: {
+        Row: {
+          badge_color: string | null
+          badge_text: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          duration_days: number
+          features: Json | null
+          id: string
+          is_active: boolean
+          is_featured: boolean
+          name: string
+          plan_type: Database["public"]["Enums"]["subscription_plan"]
+          price_mzn: number | null
+          price_usd: number | null
+          updated_at: string
+        }
+        Insert: {
+          badge_color?: string | null
+          badge_text?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_days: number
+          features?: Json | null
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          name: string
+          plan_type: Database["public"]["Enums"]["subscription_plan"]
+          price_mzn?: number | null
+          price_usd?: number | null
+          updated_at?: string
+        }
+        Update: {
+          badge_color?: string | null
+          badge_text?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_days?: number
+          features?: Json | null
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          name?: string
+          plan_type?: Database["public"]["Enums"]["subscription_plan"]
+          price_mzn?: number | null
+          price_usd?: number | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -1242,13 +1440,21 @@ export type Database = {
       lesson_type: "video" | "pdf" | "audio" | "podcast" | "text" | "image"
       mentorship_type: "ONE_TO_ONE" | "GROUP_SESSION"
       message_type: "text" | "image" | "file"
+      notification_status:
+        | "queued"
+        | "sending"
+        | "sent"
+        | "failed"
+        | "cancelled"
       notification_type:
-        | "broadcast"
-        | "signal"
-        | "booking"
-        | "message"
-        | "event"
-        | "system"
+        | "payment_pending"
+        | "payment_approved"
+        | "payment_rejected"
+        | "subscription_expiring"
+        | "subscription_expired"
+        | "new_user"
+        | "new_booking"
+        | "system_alert"
       payment_status: "pending" | "paid" | "failed" | "refunded" | "cancelled"
       signal_direction: "BUY" | "SELL"
       signal_result: "win" | "loss" | "breakeven" | "pending"
@@ -1259,6 +1465,9 @@ export type Database = {
         | "SIGNALS_ROOM"
         | "MENTORSHIP"
         | "PREMIUM_ALL_ACCESS"
+        | "SIGNALS_BASIC"
+        | "SIGNALS_PLATINUM"
+        | "SIGNALS_PREMIUM"
       subscription_status:
         | "inactive"
         | "pending_payment"
@@ -1440,13 +1649,16 @@ export const Constants = {
       lesson_type: ["video", "pdf", "audio", "podcast", "text", "image"],
       mentorship_type: ["ONE_TO_ONE", "GROUP_SESSION"],
       message_type: ["text", "image", "file"],
+      notification_status: ["queued", "sending", "sent", "failed", "cancelled"],
       notification_type: [
-        "broadcast",
-        "signal",
-        "booking",
-        "message",
-        "event",
-        "system",
+        "payment_pending",
+        "payment_approved",
+        "payment_rejected",
+        "subscription_expiring",
+        "subscription_expired",
+        "new_user",
+        "new_booking",
+        "system_alert",
       ],
       payment_status: ["pending", "paid", "failed", "refunded", "cancelled"],
       signal_direction: ["BUY", "SELL"],
@@ -1458,6 +1670,9 @@ export const Constants = {
         "SIGNALS_ROOM",
         "MENTORSHIP",
         "PREMIUM_ALL_ACCESS",
+        "SIGNALS_BASIC",
+        "SIGNALS_PLATINUM",
+        "SIGNALS_PREMIUM",
       ],
       subscription_status: [
         "inactive",
