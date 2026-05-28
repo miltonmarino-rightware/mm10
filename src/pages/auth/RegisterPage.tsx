@@ -22,8 +22,8 @@ export default function RegisterPage() {
     try {
       await register(name, email, password);
       navigate('/app');
-    } catch {
-      setError(c.registerError);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : c.registerError);
     }
   };
 

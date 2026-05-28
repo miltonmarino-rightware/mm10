@@ -15,6 +15,7 @@ import NotFoundPage from "@/pages/NotFoundPage";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
+import UpdatePasswordPage from "@/pages/auth/UpdatePasswordPage";
 
 // Client pages
 import AppDashboard from "@/pages/app/AppDashboard";
@@ -43,22 +44,37 @@ import AdminMessages from "@/pages/admin/AdminMessages";
 
 const queryClient = new QueryClient();
 
+function AuthGate({ children }: { children: React.ReactNode }) {
+  const { initializing } = useAuth();
+  if (initializing) {
+    return (
+      <div className="min-h-[100dvh] flex items-center justify-center bg-background">
+        <div className="w-8 h-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+      </div>
+    );
+  }
+  return <>{children}</>;
+}
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
+  const { user, initializing } = useAuth();
+  if (initializing) return null;
   if (!user) return <Navigate to="/auth/login" replace />;
   return <>{children}</>;
 }
 
 function AdminRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
+  const { user, isAdmin, initializing } = useAuth();
+  if (initializing) return null;
   if (!user) return <Navigate to="/auth/login" replace />;
-  if (user.role !== 'admin') return <Navigate to="/app" replace />;
+  if (!isAdmin) return <Navigate to="/app" replace />;
   return <>{children}</>;
 }
 
 function AuthRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  if (user) return <Navigate to={user.role === 'admin' ? '/admin' : '/app'} replace />;
+  const { user, isAdmin, initializing } = useAuth();
+  if (initializing) return null;
+  if (user) return <Navigate to={isAdmin ? '/admin' : '/app'} replace />;
   return <>{children}</>;
 }
 
@@ -70,10 +86,11 @@ function AppRoutes() {
       <Route path="/about" element={<AboutPage />} />
 
       {/* Auth */}
-      <Route path="/auth" element={<AuthRoute><AuthLayout /></AuthRoute>}>
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
+      <Route path="/auth" element={<AuthLayout />}>
+        <Route path="login" element={<AuthRoute><LoginPage /></AuthRoute>} />
+        <Route path="register" element={<AuthRoute><RegisterPage /></AuthRoute>} />
         <Route path="reset-password" element={<ResetPasswordPage />} />
+        <Route path="update-password" element={<UpdatePasswordPage />} />
       </Route>
 
       {/* Client */}
@@ -115,7 +132,9 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <AuthProvider>
-        <AppRoutes />
+        <AuthGate>
+          <AppRoutes />
+        </AuthGate>
       </AuthProvider>
     </BrowserRouter>
   </QueryClientProvider>
