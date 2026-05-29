@@ -5,7 +5,7 @@ import { Check, Sparkles, ArrowRight } from 'lucide-react';
 import { productService, type Product } from '@/services/products';
 import { useAuth } from '@/contexts/AuthContext';
 import { Skeleton } from '@/components/ui/skeleton';
-import ErrorBanner from '@/components/common/ErrorBanner';
+import { ErrorBanner } from "@/components/common/ErrorBanner";
 
 export default function CheckoutPage() {
   const { user } = useAuth();
@@ -35,7 +35,7 @@ export default function CheckoutPage() {
           </p>
         </motion.div>
 
-        {error && <ErrorBanner message={error} className="mb-6" />}
+        {error && <div className="mb-6"><ErrorBanner message={error} /></div>}
 
         {!products ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

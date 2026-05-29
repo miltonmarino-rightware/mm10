@@ -7,7 +7,7 @@ import { productService, type Product } from '@/services/products';
 import { paymentMethodService, type PaymentMethod } from '@/services/paymentMethods';
 import { checkoutService } from '@/services/checkout';
 import { Skeleton } from '@/components/ui/skeleton';
-import ErrorBanner from '@/components/common/ErrorBanner';
+import { ErrorBanner } from "@/components/common/ErrorBanner";
 import type { Database } from '@/integrations/supabase/types';
 
 export default function CheckoutCreatePage() {
@@ -93,7 +93,7 @@ export default function CheckoutCreatePage() {
           </div>
         </motion.div>
 
-        {error && <ErrorBanner message={error} className="mt-5" />}
+        {error && <div className="mt-5"><ErrorBanner message={error} /></div>}
 
         <form onSubmit={submit} className="mt-8 space-y-6">
           <section>
