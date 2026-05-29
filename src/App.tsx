@@ -42,6 +42,17 @@ import AdminMuseum from "@/pages/admin/AdminMuseum";
 import AppMessages from "@/pages/app/AppMessages";
 import AdminMessages from "@/pages/admin/AdminMessages";
 
+// Checkout
+import CheckoutPage from "@/pages/checkout/CheckoutPage";
+import CheckoutCreatePage from "@/pages/checkout/CheckoutCreatePage";
+import CheckoutPendingPage from "@/pages/checkout/CheckoutPendingPage";
+
+// Admin payment ops
+import AdminPayments from "@/pages/admin/AdminPayments";
+import AdminSubscriptions from "@/pages/admin/AdminSubscriptions";
+import AdminProducts from "@/pages/admin/AdminProducts";
+import AdminPaymentConfig from "@/pages/admin/AdminPaymentConfig";
+
 const queryClient = new QueryClient();
 
 function AuthGate({ children }: { children: React.ReactNode }) {
@@ -108,6 +119,11 @@ function AppRoutes() {
         <Route path="profile" element={<AppProfile />} />
       </Route>
 
+      {/* Checkout (protected) */}
+      <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+      <Route path="/checkout/pending/:paymentId" element={<ProtectedRoute><CheckoutPendingPage /></ProtectedRoute>} />
+      <Route path="/checkout/:productId" element={<ProtectedRoute><CheckoutCreatePage /></ProtectedRoute>} />
+
       {/* Admin */}
       <Route path="/admin" element={<AdminRoute><DashboardLayout /></AdminRoute>}>
         <Route index element={<AdminDashboard />} />
@@ -120,6 +136,10 @@ function AppRoutes() {
         <Route path="messages" element={<AdminMessages />} />
         <Route path="events" element={<AdminEvents />} />
         <Route path="museum" element={<AdminMuseum />} />
+        <Route path="payments" element={<AdminPayments />} />
+        <Route path="subscriptions" element={<AdminSubscriptions />} />
+        <Route path="products" element={<AdminProducts />} />
+        <Route path="payment-config" element={<AdminPaymentConfig />} />
       </Route>
 
       {/* 404 */}

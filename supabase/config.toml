@@ -1,1 +1,3 @@
 project_id = "ximabnfezggeyvelfcyk"
+[functions.send-payment-notification]
+verify_jwt = true

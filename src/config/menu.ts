@@ -39,6 +39,10 @@ export const clientNav: NavItem[] = [
 
 export const adminNav: NavItem[] = [
   { path: '/admin', label: 'Dashboard', iconKey: 'LayoutDashboard', exact: true },
+  { path: '/admin/payments', label: 'Pagamentos', iconKey: 'CreditCard' },
+  { path: '/admin/subscriptions', label: 'Subscrições', iconKey: 'BadgeCheck' },
+  { path: '/admin/products', label: 'Produtos', iconKey: 'Package' },
+  { path: '/admin/payment-config', label: 'Métodos $', iconKey: 'Wallet' },
   { path: '/admin/students', label: 'Alunos', iconKey: 'Users' },
   { path: '/admin/courses', label: 'Cursos', iconKey: 'GraduationCap' },
   { path: '/admin/broadcasts', label: 'Broadcasts', iconKey: 'Radio' },
