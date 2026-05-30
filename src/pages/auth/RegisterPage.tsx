@@ -43,6 +43,9 @@ export default function RegisterPage() {
         {error && (
           <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-3 text-sm text-destructive">{error}</div>
         )}
+        {info && (
+          <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 text-sm text-primary">{info}</div>
+        )}
 
         <div>
           <label className="text-sm font-medium text-foreground mb-1.5 block">Nome</label>
