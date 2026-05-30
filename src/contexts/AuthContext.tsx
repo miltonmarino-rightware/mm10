@@ -28,21 +28,35 @@ export const useAuth = () => {
 };
 
 async function loadUserData(userId: string, email: string): Promise<PlatformUser> {
-  const [{ data: profile }, { data: subs }] = await Promise.all([
-    supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
-    supabase.from('subscriptions').select('*').eq('user_id', userId),
-  ]);
+  // Resilient hydration: never throw, fall back to safe defaults so the app can render.
+  let profile: ProfileRow | null = null;
+  let subscriptions: SubscriptionRow[] = [];
 
-  const p = profile as ProfileRow | null;
-  const subscriptions = (subs ?? []) as SubscriptionRow[];
+  try {
+    const { data, error } = await supabase
+      .from('profiles').select('*').eq('id', userId).maybeSingle();
+    if (error) console.warn('[Auth] profile fetch error', error.message);
+    profile = (data as ProfileRow | null) ?? null;
+  } catch (e) {
+    console.warn('[Auth] profile fetch threw', e);
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('subscriptions').select('*').eq('user_id', userId);
+    if (error) console.warn('[Auth] subscriptions fetch error', error.message);
+    subscriptions = ((data ?? []) as SubscriptionRow[]);
+  } catch (e) {
+    console.warn('[Auth] subscriptions fetch threw', e);
+  }
 
   return {
     id: userId,
-    email: p?.email ?? email,
-    name: p?.full_name ?? email.split('@')[0],
-    role: (p?.role as PlatformUser['role']) ?? 'student',
-    avatar: p?.avatar_url ?? undefined,
-    profile: p,
+    email: profile?.email ?? email,
+    name: profile?.full_name ?? email.split('@')[0] ?? 'Membro',
+    role: (profile?.role as PlatformUser['role']) ?? 'student',
+    avatar: profile?.avatar_url ?? undefined,
+    profile,
     subscriptions,
   };
 }
@@ -121,14 +135,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = useCallback(async (name: string, email: string, password: string) => {
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email, password,
         options: {
           emailRedirectTo: `${window.location.origin}/app`,
           data: { full_name: name },
         },
       });
-      if (error) throw error;
+      if (error) {
+        // Friendly handling for the common "email confirmation enabled but SMTP not configured" case.
+        const msg = (error.message || '').toLowerCase();
+        if (msg.includes('confirmation email') || msg.includes('sending') || msg.includes('smtp')) {
+          throw new Error(
+            'Não foi possível enviar o email de confirmação. A tua conta pode já estar criada — tenta iniciar sessão. Se o problema persistir, contacta o administrador.'
+          );
+        }
+        throw error;
+      }
+      // If email confirmation is required, Supabase returns a user but no session.
+      if (data?.user && !data.session) {
+        // Surface a soft signal via a thrown "info" — caught by UI to show success message instead of error.
+        const info: any = new Error('CONFIRMATION_REQUIRED');
+        info.code = 'CONFIRMATION_REQUIRED';
+        throw info;
+      }
     } finally { setLoading(false); }
   }, []);
 

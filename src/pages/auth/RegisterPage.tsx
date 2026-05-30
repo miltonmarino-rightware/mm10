@@ -10,6 +10,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
   const { register, loading } = useAuth();
   const navigate = useNavigate();
   const { content } = useBusinessConfig();
@@ -17,12 +18,16 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError(''); setInfo('');
     if (password.length < 6) { setError(c.passwordMinLength); return; }
     try {
       await register(name, email, password);
       navigate('/app');
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.code === 'CONFIRMATION_REQUIRED') {
+        setInfo('Conta criada. Verifica o teu email para confirmar antes de iniciar sessão.');
+        return;
+      }
       setError(err instanceof Error ? err.message : c.registerError);
     }
   };
@@ -37,6 +42,9 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
           <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-3 text-sm text-destructive">{error}</div>
+        )}
+        {info && (
+          <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 text-sm text-primary">{info}</div>
         )}
 
         <div>
