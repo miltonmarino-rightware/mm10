@@ -28,21 +28,35 @@ export const useAuth = () => {
 };
 
 async function loadUserData(userId: string, email: string): Promise<PlatformUser> {
-  const [{ data: profile }, { data: subs }] = await Promise.all([
-    supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
-    supabase.from('subscriptions').select('*').eq('user_id', userId),
-  ]);
+  // Resilient hydration: never throw, fall back to safe defaults so the app can render.
+  let profile: ProfileRow | null = null;
+  let subscriptions: SubscriptionRow[] = [];
 
-  const p = profile as ProfileRow | null;
-  const subscriptions = (subs ?? []) as SubscriptionRow[];
+  try {
+    const { data, error } = await supabase
+      .from('profiles').select('*').eq('id', userId).maybeSingle();
+    if (error) console.warn('[Auth] profile fetch error', error.message);
+    profile = (data as ProfileRow | null) ?? null;
+  } catch (e) {
+    console.warn('[Auth] profile fetch threw', e);
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('subscriptions').select('*').eq('user_id', userId);
+    if (error) console.warn('[Auth] subscriptions fetch error', error.message);
+    subscriptions = ((data ?? []) as SubscriptionRow[]);
+  } catch (e) {
+    console.warn('[Auth] subscriptions fetch threw', e);
+  }
 
   return {
     id: userId,
-    email: p?.email ?? email,
-    name: p?.full_name ?? email.split('@')[0],
-    role: (p?.role as PlatformUser['role']) ?? 'student',
-    avatar: p?.avatar_url ?? undefined,
-    profile: p,
+    email: profile?.email ?? email,
+    name: profile?.full_name ?? email.split('@')[0] ?? 'Membro',
+    role: (profile?.role as PlatformUser['role']) ?? 'student',
+    avatar: profile?.avatar_url ?? undefined,
+    profile,
     subscriptions,
   };
 }
