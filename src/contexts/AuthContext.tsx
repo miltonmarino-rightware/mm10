@@ -135,14 +135,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = useCallback(async (name: string, email: string, password: string) => {
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email, password,
         options: {
           emailRedirectTo: `${window.location.origin}/app`,
           data: { full_name: name },
         },
       });
-      if (error) throw error;
+      if (error) {
+        // Friendly handling for the common "email confirmation enabled but SMTP not configured" case.
+        const msg = (error.message || '').toLowerCase();
+        if (msg.includes('confirmation email') || msg.includes('sending') || msg.includes('smtp')) {
+          throw new Error(
+            'Não foi possível enviar o email de confirmação. A tua conta pode já estar criada — tenta iniciar sessão. Se o problema persistir, contacta o administrador.'
+          );
+        }
+        throw error;
+      }
+      // If email confirmation is required, Supabase returns a user but no session.
+      if (data?.user && !data.session) {
+        // Surface a soft signal via a thrown "info" — caught by UI to show success message instead of error.
+        const info: any = new Error('CONFIRMATION_REQUIRED');
+        info.code = 'CONFIRMATION_REQUIRED';
+        throw info;
+      }
     } finally { setLoading(false); }
   }, []);
 
