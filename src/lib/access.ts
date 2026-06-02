@@ -2,6 +2,10 @@ import type { Feature, PlatformUser, PlanType, SubscriptionRow } from '@/types/p
 
 const ADMIN_ROLES = new Set(['admin', 'super_admin', 'mentor']);
 
+export const COURSE_PLANS: PlanType[] = ['POWER_OF_THREE', 'PREMIUM_ALL_ACCESS'];
+export const SIGNALS_PLANS: PlanType[] = ['SIGNALS_ROOM', 'SIGNALS_BASIC', 'SIGNALS_PLATINUM', 'SIGNALS_PREMIUM', 'PREMIUM_ALL_ACCESS'];
+export const MENTORSHIP_PLANS: PlanType[] = ['MENTORSHIP', 'PREMIUM_ALL_ACCESS'];
+
 function isActive(sub: SubscriptionRow): boolean {
   if (sub.status !== 'active') return false;
   if (!sub.expires_at) return true;
@@ -17,9 +21,35 @@ export function hasPlan(user: PlatformUser | null, plan: PlanType): boolean {
   return activeSubscriptions(user).some(s => s.plan_type === plan);
 }
 
+export function hasAnyPlan(user: PlatformUser | null, plans: PlanType[]): boolean {
+  const active = activeSubscriptions(user);
+  return active.some(s => plans.includes(s.plan_type));
+}
+
 export function isAdmin(user: PlatformUser | null): boolean {
   if (!user) return false;
   return ADMIN_ROLES.has(String(user.profile?.role ?? user.role));
+}
+
+export function getPlansForFeature(feature: Feature): PlanType[] {
+  switch (feature) {
+    case 'course_access':
+    case 'group_access':
+    case 'journal_access':
+    case 'museum_access':
+      return COURSE_PLANS;
+    case 'signals_access':
+      return SIGNALS_PLANS;
+    case 'mentorship_access':
+      return MENTORSHIP_PLANS;
+    default:
+      return [];
+  }
+}
+
+export function getPrimaryPlanForFeature(feature: Feature): PlanType | null {
+  const plans = getPlansForFeature(feature).filter(p => p !== 'PREMIUM_ALL_ACCESS');
+  return plans[0] ?? null;
 }
 
 /**
@@ -30,24 +60,16 @@ export function hasAccess(user: PlatformUser | null, feature: Feature): boolean 
   if (!user) return false;
   if (isAdmin(user)) return true;
 
-  const subs = activeSubscriptions(user);
-  const has = (plan: PlanType) => subs.some(s => s.plan_type === plan);
-
-  const studentActive = has('POWER_OF_THREE') || has('PREMIUM_ALL_ACCESS');
-  const signalsActive = has('SIGNALS_ROOM') || has('PREMIUM_ALL_ACCESS');
-  const mentorshipActive = has('MENTORSHIP') || has('PREMIUM_ALL_ACCESS');
-
   switch (feature) {
     case 'course_access':
     case 'group_access':
-    case 'museum_access':
-      return studentActive;
-    case 'signals_access':
-      return signalsActive;
-    case 'mentorship_access':
-      return mentorshipActive;
     case 'journal_access':
-      return subs.length > 0; // any active subscriber
+    case 'museum_access':
+      return hasAnyPlan(user, COURSE_PLANS);
+    case 'signals_access':
+      return hasAnyPlan(user, SIGNALS_PLANS);
+    case 'mentorship_access':
+      return hasAnyPlan(user, MENTORSHIP_PLANS);
     case 'admin_access':
     case 'payment_management':
     case 'subscription_management':
