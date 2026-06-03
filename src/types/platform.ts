@@ -7,17 +7,37 @@ export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 export type SubscriptionRow = Database['public']['Tables']['subscriptions']['Row'];
 
 export type Feature =
+  | 'dashboard_access'
+  | 'preview_access'
+  | 'plans_access'
+  | 'checkout_access'
+  | 'profile_access'
   | 'course_access'
   | 'signals_access'
+  | 'broadcasts_access'
   | 'journal_access'
+  | 'ai_access'
+  | 'museum_preview_access'
+  | 'museum_full_access'
   | 'museum_access'
   | 'group_access'
+  | 'messages_access'
+  | 'bookings_access'
+  | 'events_access'
   | 'mentorship_access'
   | 'admin_access'
   | 'payment_management'
   | 'subscription_management'
   | 'product_management'
   | 'payment_method_management';
+
+export type AccessLevel = 'none' | 'preview' | 'limited' | 'full' | 'admin';
+
+export interface AiLimitPolicy {
+  dailyLimit: number | null;
+  reason: 'guest_preview' | 'free_daily' | 'signals_daily' | 'subscriber_unlimited' | 'admin_unlimited';
+  upsellPlan: PlanType | null;
+}
 
 export interface PlatformUser {
   id: string;
@@ -29,7 +49,7 @@ export interface PlatformUser {
   subscriptions: SubscriptionRow[];
 }
 
-// ---- Legacy domain types (kept for mock UI screens) ----
+// ---- Legacy domain types (kept for mock UI screens while being replaced by Supabase data) ----
 export interface Course {
   id: string; title: string; description: string; thumbnail: string;
   modules: number; duration: string; progress?: number; category: string; featured?: boolean;
