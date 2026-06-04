@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LogOut, Shield, ChevronLeft, MessageSquare } from 'lucide-react';
+import { Menu, X, LogOut, Shield, ChevronLeft, MessageSquare, Sparkles, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 import { resolveIcon } from '@/lib/icons';
 import { hasAccess, isAdmin as isOperationalAdmin } from '@/lib/access';
 import type { NavItem } from '@/config/business';
-import type { Feature } from '@/types/platform';
+import type { Feature, PlatformUser } from '@/types/platform';
 
 const CLIENT_NAV_FEATURES: Partial<Record<string, Feature>> = {
   '/app': 'dashboard_access',
@@ -30,7 +30,7 @@ const PLANS_NAV_ITEM: NavItem = {
   iconKey: 'CreditCard',
 };
 
-function getClientNavForUser(user: ReturnType<typeof useAuth>['user'], clientNav: NavItem[]): NavItem[] {
+function getClientNavForUser(user: PlatformUser | null, clientNav: NavItem[]): NavItem[] {
   const visible = clientNav.filter(item => {
     const feature = CLIENT_NAV_FEATURES[item.path];
     if (!feature) return false;
@@ -52,6 +52,46 @@ function getClientNavForUser(user: ReturnType<typeof useAuth>['user'], clientNav
   return withPlans;
 }
 
+function getRevenueUpsell(user: PlatformUser | null) {
+  const hasCourse = hasAccess(user, 'course_access');
+  const hasSignals = hasAccess(user, 'broadcasts_access') || hasAccess(user, 'signals_access');
+  const hasMentorship = hasAccess(user, 'mentorship_access') || hasAccess(user, 'bookings_access');
+
+  if (!hasCourse) {
+    return {
+      eyebrow: 'Próximo passo',
+      title: 'Power Of Three',
+      body: hasSignals
+        ? 'Já recebes sinais. Agora aprende a criar os teus próprios setups com disciplina.'
+        : 'Curso, turma oficial, journal, museu e Mentor AI ilimitado.',
+      cta: 'Ver curso',
+      href: '/checkout',
+    };
+  }
+
+  if (!hasSignals) {
+    return {
+      eyebrow: 'Cross-sell',
+      title: 'Signals Premium',
+      body: 'Combina formação com alertas e broadcasts operacionais da Money Makers.',
+      cta: 'Ver sinais',
+      href: '/checkout',
+    };
+  }
+
+  if (!hasMentorship) {
+    return {
+      eyebrow: 'High ticket',
+      title: 'Mentoria 1:1',
+      body: 'Reserva acompanhamento privado. Sessões separadas a partir de 10 USD por slot.',
+      cta: 'Ver mentoria',
+      href: '/checkout',
+    };
+  }
+
+  return null;
+}
+
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
@@ -64,6 +104,7 @@ export default function DashboardLayout() {
     () => isAdmin ? menu.adminNav : getClientNavForUser(user, menu.clientNav),
     [isAdmin, menu.adminNav, menu.clientNav, user]
   );
+  const revenueUpsell = useMemo(() => isAdmin ? null : getRevenueUpsell(user), [isAdmin, user]);
 
   const isActiveCheck = (item: NavItem) =>
     item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path);
@@ -113,6 +154,27 @@ export default function DashboardLayout() {
           );
         })}
       </nav>
+
+      {revenueUpsell && (
+        <div className="px-3 pb-3">
+          <Link
+            to={revenueUpsell.href}
+            onClick={() => setSidebarOpen(false)}
+            className="group block rounded-2xl border border-primary/20 bg-primary/8 p-3 transition-all hover:bg-primary/12 hover:border-primary/35"
+          >
+            <div className="flex items-center gap-2 text-primary">
+              <Sparkles size={14} />
+              <span className="text-[9px] font-mono uppercase tracking-[0.18em]">{revenueUpsell.eyebrow}</span>
+            </div>
+            <p className="mt-2 text-sm font-semibold text-foreground">{revenueUpsell.title}</p>
+            <p className="mt-1 text-[11px] leading-4 text-muted-foreground">{revenueUpsell.body}</p>
+            <div className="mt-3 flex items-center gap-1 text-xs font-semibold text-primary">
+              {revenueUpsell.cta}
+              <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+            </div>
+          </Link>
+        </div>
+      )}
 
       {isAdmin && (
         <div className="px-3 pb-2">
