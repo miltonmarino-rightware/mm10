@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 // Layouts
 import AuthLayout from "@/components/layout/AuthLayout";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import ProtectedFeatureRoute from "@/components/auth/ProtectedFeatureRoute";
 
 // Public pages
 import LandingPage from "@/pages/LandingPage";
@@ -108,14 +109,14 @@ function AppRoutes() {
       <Route path="/app" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
         <Route index element={<AppDashboard />} />
         <Route path="chat" element={<AppChat />} />
-        <Route path="courses" element={<AppCourses />} />
-        <Route path="trades" element={<AppTrades />} />
-        <Route path="broadcasts" element={<AppBroadcasts />} />
-        <Route path="bookings" element={<AppBookings />} />
-        <Route path="groups" element={<AppGroups />} />
-        <Route path="messages" element={<AppMessages />} />
-        <Route path="events" element={<AppEvents />} />
-        <Route path="museum" element={<AppMuseum />} />
+        <Route path="courses" element={<ProtectedFeatureRoute feature="course_access"><AppCourses /></ProtectedFeatureRoute>} />
+        <Route path="trades" element={<ProtectedFeatureRoute feature="journal_access"><AppTrades /></ProtectedFeatureRoute>} />
+        <Route path="broadcasts" element={<ProtectedFeatureRoute feature="broadcasts_access"><AppBroadcasts /></ProtectedFeatureRoute>} />
+        <Route path="bookings" element={<ProtectedFeatureRoute feature="bookings_access"><AppBookings /></ProtectedFeatureRoute>} />
+        <Route path="groups" element={<ProtectedFeatureRoute feature="group_access"><AppGroups /></ProtectedFeatureRoute>} />
+        <Route path="messages" element={<ProtectedFeatureRoute feature="messages_access"><AppMessages /></ProtectedFeatureRoute>} />
+        <Route path="events" element={<ProtectedFeatureRoute feature="events_access"><AppEvents /></ProtectedFeatureRoute>} />
+        <Route path="museum" element={<ProtectedFeatureRoute feature="museum_access"><AppMuseum /></ProtectedFeatureRoute>} />
         <Route path="profile" element={<AppProfile />} />
       </Route>
 
