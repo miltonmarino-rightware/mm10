@@ -46,6 +46,14 @@ export function hasCourseSubscription(user: PlatformUser | null): boolean {
   return hasAnyPlan(user, COURSE_PLANS);
 }
 
+export function hasSignalsSubscription(user: PlatformUser | null): boolean {
+  return hasAnyPlan(user, SIGNALS_PLANS);
+}
+
+export function hasMentorshipSubscription(user: PlatformUser | null): boolean {
+  return hasAnyPlan(user, MENTORSHIP_PLANS);
+}
+
 export function getPlansForFeature(feature: Feature): PlanType[] {
   switch (feature) {
     case 'course_access':
@@ -74,9 +82,54 @@ export function getPrimaryPlanForFeature(feature: Feature): PlanType | null {
   return plans[0] ?? 'PREMIUM_ALL_ACCESS';
 }
 
+export function getEntitlements(user: PlatformUser | null): Set<Feature> {
+  const entitlements = new Set<Feature>(PUBLIC_FEATURES);
+
+  if (isAdmin(user)) {
+    [
+      'course_access', 'group_access', 'journal_access', 'ai_access', 'museum_full_access', 'museum_access',
+      'signals_access', 'broadcasts_access', 'mentorship_access', 'bookings_access', 'messages_access', 'events_access',
+      'admin_access', 'payment_management', 'subscription_management', 'product_management', 'payment_method_management',
+    ].forEach(feature => entitlements.add(feature as Feature));
+    return entitlements;
+  }
+
+  for (const sub of activeSubscriptions(user)) {
+    switch (sub.plan_type) {
+      case 'POWER_OF_THREE':
+        ['course_access', 'group_access', 'journal_access', 'ai_access', 'museum_full_access', 'museum_access', 'messages_access']
+          .forEach(feature => entitlements.add(feature as Feature));
+        break;
+      case 'SIGNALS_ROOM':
+      case 'SIGNALS_BASIC':
+      case 'SIGNALS_PLATINUM':
+      case 'SIGNALS_PREMIUM':
+        ['signals_access', 'broadcasts_access', 'ai_access']
+          .forEach(feature => entitlements.add(feature as Feature));
+        break;
+      case 'MENTORSHIP':
+        ['mentorship_access', 'bookings_access', 'ai_access']
+          .forEach(feature => entitlements.add(feature as Feature));
+        break;
+      case 'PREMIUM_ALL_ACCESS':
+        ['course_access', 'group_access', 'journal_access', 'ai_access', 'museum_full_access', 'museum_access', 'messages_access', 'signals_access', 'broadcasts_access', 'mentorship_access', 'bookings_access', 'events_access']
+          .forEach(feature => entitlements.add(feature as Feature));
+        break;
+      default:
+        break;
+    }
+  }
+
+  return entitlements;
+}
+
+export function hasEntitlement(user: PlatformUser | null, feature: Feature): boolean {
+  return getEntitlements(user).has(feature);
+}
+
 export function getAiLimitPolicy(user: PlatformUser | null): AiLimitPolicy {
   if (isAdmin(user)) return { dailyLimit: null, reason: 'admin_unlimited', upsellPlan: null };
-  if (hasCourseSubscription(user) || hasPlan(user, 'PREMIUM_ALL_ACCESS')) return { dailyLimit: null, reason: 'subscriber_unlimited', upsellPlan: null };
+  if (hasCourseSubscription(user) || hasMentorshipSubscription(user) || hasPlan(user, 'PREMIUM_ALL_ACCESS')) return { dailyLimit: null, reason: 'subscriber_unlimited', upsellPlan: null };
   if (hasPlan(user, 'SIGNALS_PREMIUM')) return { dailyLimit: 5, reason: 'signals_daily', upsellPlan: 'POWER_OF_THREE' };
   if (hasPlan(user, 'SIGNALS_PLATINUM')) return { dailyLimit: 3, reason: 'signals_daily', upsellPlan: 'POWER_OF_THREE' };
   if (hasPlan(user, 'SIGNALS_BASIC') || hasPlan(user, 'SIGNALS_ROOM')) return { dailyLimit: 2, reason: 'signals_daily', upsellPlan: 'POWER_OF_THREE' };
@@ -110,7 +163,7 @@ export function getFeatureAccess(user: PlatformUser | null, feature: Feature): F
   }
 
   if (feature === 'museum_preview_access') {
-    const full = hasCourseSubscription(user);
+    const full = hasCourseSubscription(user) || hasPlan(user, 'PREMIUM_ALL_ACCESS');
     return {
       feature,
       level: full ? 'full' : 'preview',
@@ -133,6 +186,7 @@ export function getFeatureAccess(user: PlatformUser | null, feature: Feature): F
   return { feature, level: 'none', allowed: false, reason: 'locked', requiredPlans, upgradePlan };
 }
 
+/** Full access only. Use getFeatureAccess() for preview/limited states. */
 export function hasAccess(user: PlatformUser | null, feature: Feature): boolean {
   const access = getFeatureAccess(user, feature);
   return access.allowed && (access.level === 'full' || access.level === 'admin');
