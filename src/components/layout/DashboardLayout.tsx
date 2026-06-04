@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, LogOut, Shield, ChevronLeft, MessageSquare } from 'lucide-react';
@@ -6,7 +6,51 @@ import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { useBusinessConfig } from '@/hooks/useBusinessConfig';
 import { resolveIcon } from '@/lib/icons';
+import { hasAccess, isAdmin as isOperationalAdmin } from '@/lib/access';
 import type { NavItem } from '@/config/business';
+import type { Feature } from '@/types/platform';
+
+const CLIENT_NAV_FEATURES: Partial<Record<string, Feature>> = {
+  '/app': 'dashboard_access',
+  '/app/chat': 'ai_access',
+  '/app/courses': 'course_access',
+  '/app/trades': 'journal_access',
+  '/app/broadcasts': 'broadcasts_access',
+  '/app/bookings': 'bookings_access',
+  '/app/groups': 'group_access',
+  '/app/messages': 'messages_access',
+  '/app/events': 'events_access',
+  '/app/museum': 'museum_access',
+  '/app/profile': 'profile_access',
+};
+
+const PLANS_NAV_ITEM: NavItem = {
+  path: '/checkout',
+  label: 'Planos',
+  iconKey: 'CreditCard',
+};
+
+function getClientNavForUser(user: ReturnType<typeof useAuth>['user'], clientNav: NavItem[]): NavItem[] {
+  const visible = clientNav.filter(item => {
+    const feature = CLIENT_NAV_FEATURES[item.path];
+    if (!feature) return false;
+
+    // AI is intentionally visible to every authenticated user; limits happen inside the chat flow.
+    if (feature === 'ai_access') return true;
+
+    return hasAccess(user, feature);
+  });
+
+  const hasPlans = visible.some(item => item.path === PLANS_NAV_ITEM.path);
+  const hasProfile = visible.some(item => item.path === '/app/profile');
+  const profileItem = clientNav.find(item => item.path === '/app/profile');
+
+  const withPlans = hasPlans ? visible : [...visible, PLANS_NAV_ITEM];
+
+  // Keep Profile as the last client item because it is an account destination, not product content.
+  if (!hasProfile && profileItem) return [...withPlans, profileItem];
+  return withPlans;
+}
 
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -15,8 +59,11 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const { brand, content, menu } = useBusinessConfig();
 
-  const isAdmin = user?.role === 'admin';
-  const navItems = isAdmin ? menu.adminNav : menu.clientNav;
+  const isAdmin = isOperationalAdmin(user);
+  const navItems = useMemo(
+    () => isAdmin ? menu.adminNav : getClientNavForUser(user, menu.clientNav),
+    [isAdmin, menu.adminNav, menu.clientNav, user]
+  );
 
   const isActiveCheck = (item: NavItem) =>
     item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path);
