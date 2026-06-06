@@ -6,63 +6,51 @@
 
 @layer base {
   :root {
-    /* Money Makers — NAVY (Private / Terminal Zone) — default */
     --navy-50:  228 53% 93%;
     --navy-100: 228 49% 83%;
     --navy-300: 228 42% 45%;
     --navy-500: 228 54% 22%;
     --navy-700: 228 67% 17%;
     --navy-900: 228 73% 10%;
+    --terminal-black: 228 82% 6%;
+    --terminal-grid: 210 80% 72%;
+    --terminal-blue: 209 100% 62%;
+    --terminal-cyan: 185 96% 60%;
 
-    /* Money Makers — PAPER (Public / Editorial Zone) */
     --paper-light: 45 28% 92%;
     --paper-bg:    44 23% 89%;
     --paper-dark:  44 18% 83%;
     --paper-white: 0 0% 100%;
 
-    /* Market semantics — strict use only (charts/PL/signals) */
     --market-up:   141 67% 51%;
     --market-down: 351 87% 64%;
     --market-warn: 33 88% 55%;
 
-    /* Semantic tokens — terminal (default) */
     --background: var(--navy-900);
     --foreground: 0 0% 100%;
-
     --card: var(--navy-700);
     --card-foreground: 0 0% 100%;
-
     --popover: var(--navy-700);
     --popover-foreground: 0 0% 100%;
-
     --primary: var(--navy-500);
     --primary-foreground: 0 0% 100%;
-
     --secondary: 228 50% 16%;
     --secondary-foreground: 0 0% 100%;
-
     --muted: 228 20% 60%;
     --muted-foreground: 228 20% 70%;
-
     --accent: var(--navy-500);
     --accent-foreground: 0 0% 100%;
-
     --destructive: var(--market-down);
     --destructive-foreground: 0 0% 100%;
-
     --warning: var(--market-warn);
     --warning-foreground: 30 30% 12%;
-
     --border: 228 40% 22%;
     --input: 228 45% 18%;
     --ring: var(--navy-300);
-
     --radius: 0.75rem;
-
     --surface: var(--navy-900);
     --surface-raised: var(--navy-700);
     --surface-overlay: 228 70% 8%;
-
     --sidebar-background: 228 70% 8%;
     --sidebar-foreground: 228 20% 70%;
     --sidebar-primary: var(--navy-500);
@@ -71,13 +59,11 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 228 40% 20%;
     --sidebar-ring: var(--navy-300);
-
     --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
     --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
     --font-serif:   'Instrument Serif', Georgia, serif;
   }
 
-  /* PAPER theme — wrap public/editorial/auth surfaces with .theme-paper */
   .theme-paper {
     --background: var(--paper-bg);
     --foreground: 228 73% 10%;
@@ -103,9 +89,7 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: var(--font-sans);
@@ -113,12 +97,8 @@
 }
 
 @layer utilities {
-  .surface {
-    @apply bg-[hsl(var(--surface))];
-  }
-  .surface-raised {
-    @apply bg-[hsl(var(--surface-raised))];
-  }
+  .surface { @apply bg-[hsl(var(--surface))]; }
+  .surface-raised { @apply bg-[hsl(var(--surface-raised))]; }
   .font-mono-num {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
@@ -135,50 +115,50 @@
   .bg-market-up\/10 { background-color: hsl(var(--market-up) / 0.1); }
   .bg-market-down\/10 { background-color: hsl(var(--market-down) / 0.1); }
   .bg-market-warn\/10 { background-color: hsl(var(--market-warn) / 0.1); }
-  .glow-primary {
-    box-shadow: 0 8px 32px -8px hsl(var(--navy-900) / 0.6), 0 2px 6px hsl(var(--navy-900) / 0.3);
-  }
-  .glow-primary-sm {
-    box-shadow: 0 4px 12px -4px hsl(var(--navy-900) / 0.5);
-  }
-  .shadow-premium {
-    box-shadow: 0 10px 40px -12px rgba(5, 11, 46, 0.45), 0 2px 6px rgba(5, 11, 46, 0.15);
-  }
-  .shadow-card {
-    box-shadow: 0 4px 16px -6px rgba(5, 11, 46, 0.35);
-  }
-  .border-glow {
-    border-color: hsl(var(--navy-300) / 0.5);
-  }
+  .glow-primary { box-shadow: 0 8px 32px -8px hsl(var(--navy-900) / 0.6), 0 2px 6px hsl(var(--navy-900) / 0.3); }
+  .glow-primary-sm { box-shadow: 0 4px 12px -4px hsl(var(--navy-900) / 0.5); }
+  .shadow-premium { box-shadow: 0 10px 40px -12px rgba(5, 11, 46, 0.45), 0 2px 6px rgba(5, 11, 46, 0.15); }
+  .shadow-card { box-shadow: 0 4px 16px -6px rgba(5, 11, 46, 0.35); }
+  .border-glow { border-color: hsl(var(--navy-300) / 0.5); }
   .text-gradient-primary {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--navy-300)), hsl(var(--navy-500)));
+    background-image: linear-gradient(135deg, hsl(var(--terminal-cyan)), hsl(var(--terminal-blue)), hsl(var(--navy-300)));
   }
-  .scrollbar-thin {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--navy-500)) transparent;
+  .scrollbar-thin { scrollbar-width: thin; scrollbar-color: hsl(var(--navy-500)) transparent; }
+  .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: hsl(var(--navy-500)); border-radius: 2px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: hsl(var(--navy-300)); }
+  .animate-pulse-soft { animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.75; } }
+  .text-glow-primary { text-shadow: 0 0 28px hsl(var(--terminal-blue) / 0.22); }
+
+  .terminal-grid {
+    background-image:
+      linear-gradient(hsl(var(--terminal-grid) / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--terminal-grid) / 0.07) 1px, transparent 1px),
+      radial-gradient(circle at 50% 0%, hsl(var(--terminal-blue) / 0.18), transparent 38%);
+    background-size: 64px 64px, 64px 64px, 100% 100%;
   }
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 4px;
+  .terminal-panel {
+    background: linear-gradient(180deg, hsl(var(--card) / 0.82), hsl(var(--terminal-black) / 0.72));
+    border: 1px solid hsl(var(--terminal-grid) / 0.16);
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.06), 0 24px 80px -32px hsl(var(--terminal-black) / 0.9);
+    backdrop-filter: blur(18px);
   }
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
+  .market-wave {
+    background:
+      radial-gradient(circle at 20% 20%, hsl(var(--terminal-cyan) / 0.18), transparent 26%),
+      radial-gradient(circle at 80% 30%, hsl(var(--market-up) / 0.12), transparent 24%),
+      radial-gradient(circle at 50% 80%, hsl(var(--market-down) / 0.10), transparent 24%);
+    filter: blur(1px);
   }
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: hsl(var(--navy-500));
-    border-radius: 2px;
+  .animate-market-drift { animation: market-drift 12s ease-in-out infinite alternate; }
+  @keyframes market-drift {
+    0% { transform: translate3d(-1.5%, 0, 0) scale(1); opacity: .82; }
+    100% { transform: translate3d(1.5%, -1%, 0) scale(1.04); opacity: 1; }
   }
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--navy-300));
-  }
-  .animate-pulse-soft {
-    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  @keyframes pulse-soft {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.75; }
-  }
-  .text-glow-primary {
-    text-shadow: none;
+  .ticker-mask {
+    mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
   }
 }
