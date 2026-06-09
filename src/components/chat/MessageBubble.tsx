@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Bot, User } from 'lucide-react';
 import type { ChatMessage } from '@/types/chat';
 
 interface MessageBubbleProps {
@@ -15,19 +16,34 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, index }) 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.3), ease: [0.16, 1, 0.3, 1] }}
-      className={`flex w-full mb-6 ${isUser ? 'justify-end' : 'justify-start'}`}
+      className={`mb-6 flex w-full gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
     >
-      <div className={`max-w-[88%] md:max-w-[75%] lg:max-w-[65%]`}>
+      {!isUser && (
+        <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-primary/25 bg-primary/10 text-primary glow-primary-sm">
+          <Bot size={17} />
+        </div>
+      )}
+      <div className="max-w-[88%] md:max-w-[76%] lg:max-w-[68%]">
+        <div className={`mb-2 flex items-center gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
+          <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            {isUser ? 'Trader Input' : 'MM Intelligence'}
+          </span>
+        </div>
         <div
-          className={`px-4 md:px-5 py-3.5 rounded-2xl text-[15px] leading-relaxed whitespace-pre-wrap ${
+          className={`whitespace-pre-wrap rounded-3xl px-4 py-3.5 text-[15px] leading-relaxed shadow-card md:px-5 ${
             isUser
-              ? 'bg-primary text-primary-foreground rounded-tr-sm'
-              : 'bg-card border border-border text-card-foreground rounded-tl-sm'
+              ? 'rounded-tr-md bg-primary text-primary-foreground glow-primary-sm'
+              : 'terminal-panel rounded-tl-md text-card-foreground'
           }`}
         >
           {message.content}
         </div>
       </div>
+      {isUser && (
+        <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-foreground">
+          <User size={16} />
+        </div>
+      )}
     </motion.div>
   );
 };
